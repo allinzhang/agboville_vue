@@ -1,7 +1,7 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-14 21:26:55
+ * @LastEditTime: 2021-12-15 22:58:11
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/views/login/index.vue
@@ -139,14 +139,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
+import { defineComponent, ref, reactive, getCurrentInstance, computed } from "vue";
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { ElMessage } from 'element-plus';
 // import { Component, Vue } from "vue-property-decorator";
 // import Vue from 'vue'
 // import Component from 'vue-class-component'
 // import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 
 import { AuthService, MobileLoginParams } from "../../api/AuthService";
+
+import { UserState } from "../../store/modules/user";
 // import { HttpResponse } from "@/types/http";
 // @Component({
 //   components: {},
@@ -170,6 +174,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
+    const store = useStore<UserState>();
     const pageWidth = ref(0);
     const pageHeight = ref(0);
     const loginMethod = ref(1);
@@ -184,10 +189,16 @@ export default defineComponent({
     })
     const toLoginVali = async () => {
       const res: HttpResponse = await AuthService.loginByMobile(mobileParams);
+      console.log(res)
       if (res.status === 200 && res.data.code === 0) {
-        const { token } = res.data.data;
+        const { token, userInfo } = res.data.data;
         localStorage.setItem("SET_TOKEN", token);
+        store.dispatch("SET_TOKEN", token);
+        store.dispatch("SET_USER_ID", userInfo.id);
+        store.dispatch("SET_USER_INFO", userInfo);
         router.replace("/");
+      } else {
+        ElMessage.error(res.data.msg)
       }
     };
     const changeLoginMethod = (method: number) => {

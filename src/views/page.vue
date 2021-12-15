@@ -16,16 +16,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  data () {
-    return {
-      projectId: "",
-    };
-  },
-  mounted(): void {
-    const query = this.$route.query;
-    if (query) {
-      this.projectId = query.id;
-    }
-  }
+
 })
 </script>

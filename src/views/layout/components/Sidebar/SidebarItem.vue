@@ -51,7 +51,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Options, Vue } from "vue-class-component";
-import { Prop } from "vue-property-decorator";
+// import { Prop } from "vue-property-decorator";
 import path from "path";
 import { isExternal } from "../../../../static/utils/validate";
 import Item from "./Item.vue";

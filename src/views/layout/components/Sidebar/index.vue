@@ -13,13 +13,30 @@
         mode="vertical"
         router
       >
-        <SidebarItem
+        <!-- <SidebarItem
           v-for="(route, index) in menuList"
-          :key="route.path"
+          :key="index"
           :item="route"
           :index="index"
           :base-path="route.path"
-        />
+        ></SidebarItem> -->
+        <el-sub-menu
+          v-for="(route, index) in menuList"
+          :key="route.path"
+          :index="route.path"
+        >
+          <template #title>
+            <!-- <el-icon><location /></el-icon> -->
+            <span>{{ route.title || "" }}</span>
+          </template>
+          <el-menu-item
+            :index="child.path"
+            v-for="(child) in route.children"
+            :key="child.path"
+          >
+            {{ child.title || "" }}
+          </el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -30,7 +47,7 @@ import { defineComponent } from "vue";
 // import { mapGetters } from "vuex";
 // import { Options, Vue } from "vue-class-component";
 import Logo from "./Logo.vue";
-import SidebarItem from "./SidebarItem.vue";
+// import SidebarItem from "./SidebarItem.vue";
 
 // @Options({
 //   components: {
@@ -40,7 +57,7 @@ import SidebarItem from "./SidebarItem.vue";
 export default defineComponent({
   components: {
     Logo,
-    SidebarItem,
+    // SidebarItem,
   },
   data () {
     return {

@@ -13,5 +13,28 @@
   </div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+import { useStore } from 'vuex';
+
+import * as types from "./store/modules/types";
+
+export default defineComponent({
+  setup() {
+    const store = useStore();
+    for (let key in types) {
+      const value = sessionStorage.getItem(key);
+      if (value) {
+        store.dispatch(key, value);
+      }
+    }
+    store.dispatch("SET_TOKEN", localStorage.getItem("SET_TOKEN"))
+    return {
+
+    }
+  }
+})
+</script>
+
 <style>
 </style>

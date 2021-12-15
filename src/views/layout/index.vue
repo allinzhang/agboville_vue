@@ -1,7 +1,7 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 15:58:15
- * @LastEditTime: 2021-12-14 21:33:29
+ * @LastEditTime: 2021-12-15 23:01:42
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/views/layout/index.vue
@@ -9,14 +9,17 @@
 -->
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div
+    <!-- <div
       v-if="device === 'mobile' && sidebar.opened"
       class="drawer-bg"
       @click="handleClickOutside"
-    />
+    /> -->
     <Sidebar class="sidebar-container" />
-    <div :class="{ hasTagsView: needTagsView }" class="main-container">
-      <div :class="{ 'fixed-header': fixedHeader }">
+      <!-- :class="{ hasTagsView: needTagsView }" -->
+    <div
+      class="main-container">
+      <!-- <div :class="{ 'fixed-header': fixedHeader }"> -->
+      <div>
         <Navbar />
         <!-- <tags-view v-if="needTagsView" /> -->
       </div>

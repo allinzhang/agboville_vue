@@ -81,7 +81,7 @@
         <template #default="scope">
           <el-tag v-if="scope.row.status == 0" type="danger">紧急</el-tag>
           <el-tag v-else-if="scope.row.status == 1" type="warning">高</el-tag>
-          <el-tag v-else-if="scope.row.status == 2" type="primary">中</el-tag>
+          <el-tag v-else-if="scope.row.status == 2" type="success">中</el-tag>
           <el-tag v-else-if="scope.row.status == 3" type="info">低</el-tag>
         </template>
       </el-table-column>
@@ -89,7 +89,7 @@
         <template #default="scope">
           <el-tag v-if="scope.row.status == 0" type="info">任务池</el-tag>
           <el-tag v-else-if="scope.row.status == 1" type="info">未开始</el-tag>
-          <el-tag v-else-if="scope.row.status == 2" type="primary">进行中</el-tag>
+          <el-tag v-else-if="scope.row.status == 2" type="success">进行中</el-tag>
           <el-tag v-else-if="scope.row.status == 3" type="info">已完成</el-tag>
           <el-tag v-else-if="scope.row.status == 4" type="info">已取消</el-tag>
           <el-tag v-else-if="scope.row.status == 5" type="danger">延期</el-tag>
@@ -236,7 +236,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+// vuex
+import { useStore } from 'vuex';
+import { ProjectState } from "../../store/modules/project";
 
 import { ElMessageBox, ElMessage } from "element-plus";
 // import { Search, CirclePlus, TopRight } from '@element-plus/icons'
@@ -293,18 +296,22 @@ export default defineComponent({
     this.getList();
   },
   setup() {
+    const store = useStore<ProjectState>();
+    const projectId = computed(() => store.state.project.projectId);
+    console.log("projectId", projectId)
     // const links = Ref([]);
     // console.log("links", links);
-    const querySearchUser = (queryString: string, cb: (arg: any) => void) => {
-      let results = [
-        { value: "name" },
-        { value: "list" },
-      ];
-      cb(results);
-    };
+    // const querySearchUser = (queryString: string, cb: (arg: any) => void) => {
+    //   let results = [
+    //     { value: "name" },
+    //     { value: "list" },
+    //   ];
+    //   cb(results);
+    // };
     return {
+      projectId,
       // state: ref(''),
-      querySearchUser,
+      // querySearchUser,
     };
   },
   methods: {
@@ -377,9 +384,9 @@ export default defineComponent({
     // }
     handleDetail(row: Mission): void {
       if (row.id) {
-        this.$router.push("/project/detail", {
-          id: row.id,
-        });
+        // this.$router.push("/project/detail", {
+        //   id: row.id,
+        // });
       }
     },
     handleDelete(row: Mission, index: number): void {

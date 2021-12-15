@@ -1,38 +1,40 @@
+/*
+ * @Author: allin.zhang
+ * @Date: 2021-12-14 17:10:36
+ * @LastEditTime: 2021-12-15 23:00:50
+ * @LastEditors: allin.zhang
+ * @Description: 
+ * @FilePath: /agboville_web_vite/src/store/index.ts
+ * 可以输入预定的版权声明、个性签名、空行等
+ */
 import { createStore } from "vuex";
 import user, { UserState } from "./modules/user";
+import project, { ProjectState } from "./modules/project";
+import nav, { NavState } from "./modules/nav";
 
 export type StateProps = {
   user: UserState;
+  project: ProjectState;
+  nav: NavState;
 };
+
+const myPlugin = (store) => {
+  // 当 store 初始化后调用
+  store.subscribe((mutation, state) => {
+    console.log("store.subscribe", mutation)
+    // 每次 mutation 之后调用
+    // mutation 的格式为 { type, payload }
+    sessionStorage.setItem(mutation.type, mutation.payload);
+  })
+}
 
 export default createStore<StateProps>({
   modules: {
     user,
+    project,
+    nav,
   },
+  plugins: [
+    myPlugin
+  ]
 });
-
-// import Vue from 'vue'
-// import Vuex, { Module } from 'vuex'
-// import getters from './getters'
-
-// Vue.use(Vuex)
-
-// // https://webpack.js.org/guides/dependency-management/#requirecontext
-// const modulesFiles = require.context('./modules', true, /\.ts$/)
-
-// // you do not need `import app from './modules/app'`
-// // it will auto require all vuex module from modules file
-// const modules = modulesFiles.keys().reduce((modules: any, modulePath) => {
-//   // set './app.js' => 'app'
-//   const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
-//   const value = modulesFiles(modulePath)
-//   modules[moduleName] = value.default
-//   return modules
-// }, {})
-
-// const store = new Vuex.Store({
-//   modules,
-//   getters
-// })
-
-// export default store

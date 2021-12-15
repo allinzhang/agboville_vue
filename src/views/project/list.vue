@@ -1,10 +1,10 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-03 17:09:51
+ * @LastEditTime: 2021-12-15 23:00:12
  * @LastEditors: allin.zhang
  * @Description: 
- * @FilePath: /agboville_user_vue/src/views/dashboard/index.vue
+ * @FilePath: /agboville_web_vite/src/views/project/list.vue
  * 可以输入预定的版权声明、个性签名、空行等
 -->
 <template>
@@ -83,7 +83,7 @@
             v-for="(stage, stageIndex) in scope.row.stageList"
             :key="stageIndex"
           >
-            <el-tag v-if="stage.id == scope.row.stageId" type="primary">
+            <el-tag v-if="stage.id == scope.row.stageId" type="info">
               {{ stage.name || "" }}
             </el-tag>
           </template>
@@ -256,6 +256,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 // import { Options, Vue } from "vue-class-component";
 // import { ref } from "vue";
 
@@ -267,6 +269,8 @@ import { HttpResponse } from "../../types/http";
 import { Project } from "../../types/project";
 
 import { ExcelService } from "../../static/utils/exportToExcel";
+
+import { ProjectState } from "../../store/modules/project";
 
 // @Options({
 //   components: {},
@@ -307,18 +311,33 @@ export default defineComponent({
     this.getList();
   },
   setup() {
+    const router = useRouter();
+    const store = useStore<ProjectState>();
     // const links = Ref([]);
     // console.log("links", links);
-    const querySearchUser = (queryString: string, cb: (arg: any) => void) => {
-      let results = [
-        { value: "name" },
-        { value: "list" },
-      ];
-      cb(results);
-    };
+    // const querySearchUser = (queryString: string, cb: (arg: any) => void) => {
+    //   let results = [
+    //     { value: "name" },
+    //     { value: "list" },
+    //   ];
+    //   cb(results);
+    // };
+    console.log(store)
+    const toProjectMissionList = (row: Project) => {
+      if (row.id) {
+        store.dispatch("SET_PROJECT_ID", row.id);
+        router.push({
+          path: "/mission/table",
+          query: {
+            id: row.id,
+          },
+        });
+      }
+    }
     return {
       // state: ref(''),
-      querySearchUser,
+      // querySearchUser,
+      toProjectMissionList,
     };
   },
   methods: {
@@ -378,16 +397,7 @@ export default defineComponent({
     handleSelectUser(): void {
       console.log("handleSelectUser")
     },
-    toProjectMissionList(row: Project): void {
-      if (row.id) {
-        this.$router.push({
-          path: "/mission/table",
-          query: {
-            id: row.id,
-          },
-        });
-      }
-    },
+    
     handleDetail(row: Project): void {
       if (row.id) {
         this.$router.push("/project/detail", {
