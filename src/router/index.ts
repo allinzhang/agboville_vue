@@ -40,74 +40,74 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
-  // {
-  //   path: "/project",
-  //   component: Layout,
-  //   redirect: "/project/list",
-  //   children: [
-  //     {
-  //       path: "list",
-  //       component: () => import("../views/project/list.vue"),
-  //       name: "ProjectList",
-  //       meta: { title: "项目管理", icon: "project", affix: true },
-  //     },
-  //     {
-  //       path: "member",
-  //       component: () => import("../views/project/member.vue"),
-  //       name: "ProjectMember",
-  //       meta: { title: "项目成员", icon: "member", affix: true },
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: "/mission",
-  //   component: Layout,
-  //   redirect: "/mission/table",
-  //   children: [
-  //     {
-  //       path: "board",
-  //       component: () => import("../views/mission/board.vue"),
-  //       name: "MissionBoard",
-  //       meta: { title: "任务管理", icon: "board", affix: true },
-  //     },
-  //     {
-  //       path: "calendar",
-  //       component: () => import("../views/mission/calendar.vue"),
-  //       name: "MissionCalendar",
-  //       meta: { title: "任务管理", icon: "calendar", affix: true },
-  //     },
-  //     {
-  //       path: "gantt",
-  //       component: () => import("../views/mission/gantt.vue"),
-  //       name: "MissionGantt",
-  //       meta: { title: "任务管理", icon: "gantt", affix: true },
-  //     },
-  //     {
-  //       path: "list",
-  //       component: () => import("../views/mission/list.vue"),
-  //       name: "MissionList",
-  //       meta: { title: "任务管理", icon: "list", affix: true },
-  //     },
-  //     {
-  //       path: "mind",
-  //       component: () => import("../views/mission/mind.vue"),
-  //       name: "MissionMind",
-  //       meta: { title: "任务管理", icon: "mind", affix: true },
-  //     },
-  //     {
-  //       path: "table",
-  //       component: () => import("../views/mission/table.vue"),
-  //       name: "MissionTable",
-  //       meta: { title: "任务管理", icon: "table", affix: true },
-  //     },
-  //     {
-  //       path: "timeline",
-  //       component: () => import("../views/mission/timeline.vue"),
-  //       name: "MissionTimeline",
-  //       meta: { title: "任务管理", icon: "timeline", affix: true },
-  //     },
-  //   ],
-  // },
+  {
+    path: "/project",
+    component: Layout,
+    redirect: "/project/list",
+    children: [
+      {
+        path: "list",
+        component: () => import("../views/project/list.vue"),
+        name: "ProjectList",
+        meta: { title: "项目管理", icon: "project", affix: true },
+      },
+      {
+        path: "member",
+        component: () => import("../views/project/member.vue"),
+        name: "ProjectMember",
+        meta: { title: "项目成员", icon: "member", affix: true },
+      },
+    ],
+  },
+  {
+    path: "/mission",
+    component: Layout,
+    redirect: "/mission/table",
+    children: [
+      {
+        path: "board",
+        component: () => import("../views/mission/board.vue"),
+        name: "MissionBoard",
+        meta: { title: "任务管理", icon: "board", affix: true },
+      },
+      {
+        path: "calendar",
+        component: () => import("../views/mission/calendar.vue"),
+        name: "MissionCalendar",
+        meta: { title: "任务管理", icon: "calendar", affix: true },
+      },
+      {
+        path: "gantt",
+        component: () => import("../views/mission/gantt.vue"),
+        name: "MissionGantt",
+        meta: { title: "任务管理", icon: "gantt", affix: true },
+      },
+      {
+        path: "list",
+        component: () => import("../views/mission/list.vue"),
+        name: "MissionList",
+        meta: { title: "任务管理", icon: "list", affix: true },
+      },
+      {
+        path: "mind",
+        component: () => import("../views/mission/mind.vue"),
+        name: "MissionMind",
+        meta: { title: "任务管理", icon: "mind", affix: true },
+      },
+      {
+        path: "table",
+        component: () => import("../views/mission/table.vue"),
+        name: "MissionTable",
+        meta: { title: "任务管理", icon: "table", affix: true },
+      },
+      {
+        path: "timeline",
+        component: () => import("../views/mission/timeline.vue"),
+        name: "MissionTimeline",
+        meta: { title: "任务管理", icon: "timeline", affix: true },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
