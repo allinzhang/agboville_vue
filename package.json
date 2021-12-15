@@ -1,0 +1,29 @@
+{
+  "name": "agboville_web_vite",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "echarts": "^5.2.2",
+    "element-plus": "^1.2.0-beta.6",
+    "qs": "^6.10.2",
+    "vue": "^3.2.25",
+    "vue-class-component": "^7.2.6",
+    "vue-count-to": "^1.0.13",
+    "vue-property-decorator": "^9.1.2",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2",
+    "xlsx": "^0.17.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.0.0",
+    "sass": "^1.45.0",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.29.8"
+  }
+}
