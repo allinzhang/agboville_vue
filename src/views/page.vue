@@ -14,8 +14,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default defineComponent({
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    return {
 
+    }
+  }
 })
 </script>

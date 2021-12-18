@@ -11,20 +11,28 @@
 import { ActionContext } from 'vuex';
 import { SET_TOKEN, SET_USER_ID } from './types';
 export interface ProjectState {
+  isProjectMenu: boolean;
   projectId: string;
 }
 
 const state = {
-  projectId: ""
+  isProjectMenu: false,
+  projectId: "",
 };
 const actions = {
   SET_PROJECT_ID(ctx: ActionContext<ProjectState, any>, id: string) {
     ctx.commit("SET_PROJECT_ID", id);
   },
+  SET_IS_PROJECT_MENU(ctx: ActionContext<ProjectState, any>, isProjectMenu: boolean) {
+    ctx.commit("SET_IS_PROJECT_MENU", isProjectMenu);
+  },
 };
 const mutations = {
   SET_PROJECT_ID(state: ProjectState, id: string) {
     state.projectId = id;
+  },
+  SET_IS_PROJECT_MENU(state: ProjectState, isProjectMenu: boolean) {
+    state.isProjectMenu = isProjectMenu;
   },
 };
 const getters = {

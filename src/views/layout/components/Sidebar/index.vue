@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'has-logo': showLogo }">
-    <Logo v-if="showLogo" :collapse="isCollapse" />
+    <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         default-active="1"
@@ -65,16 +65,8 @@ export default defineComponent({
       isCollapse: false,
       activeMenu: 0,
       menuList: [
-        {
-          hidden: false,
-          icon: "",
-          title: "总览",
-          path: "/dashboard",
-          children: [
-            { icon: "", title: "项目总览", path: "/dashboard/project" },
-            { icon: "", title: "任务总览", path: "/dashboard/mission" },
-          ],
-        },
+        { hidden: false, icon: "", title: "总览", path: "/dashboard" },
+        { hidden: false, icon: "", title: "今日事项", path: "/dashboard" },
         {
           hidden: false,
           icon: "",

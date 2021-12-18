@@ -2,7 +2,8 @@
   <section class="todoapp">
     <!-- header -->
     <header class="header">
-      <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="addTodo">
+      <!-- @keyup.enter="addTodo" -->
+      <input class="new-todo" autocomplete="off" placeholder="Todo List" >
     </header>
     <!-- main section -->
     <section v-show="todos.length" class="main">

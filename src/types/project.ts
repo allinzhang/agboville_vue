@@ -7,3 +7,9 @@ export interface Project {
   assignee: number;
   stageId: number;
 }
+export interface ProjectUser {
+  id: number;
+  avatar: string;
+  nickname: string;
+  realname: string;
+}

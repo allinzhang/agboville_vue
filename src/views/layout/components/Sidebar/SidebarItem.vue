@@ -82,7 +82,7 @@ export default defineComponent({
   // @Prop(Boolean) isNest!: boolean;
   props: {
     index: Number,
-    item: Object,
+    item: MenuItem,
     basePath: String,
     isNest: Boolean,
   },

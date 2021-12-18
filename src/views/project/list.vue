@@ -213,20 +213,24 @@
         <el-form-item label="计划开始时间">
           <el-date-picker
             v-model="objForm.planStartDate"
-            type="date"
+            type="datetime"
             placeholder="选择计划开始时间"
             :disabled-date="disabledDate"
             :shortcuts="shortcuts"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
           >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="计划结束时间">
           <el-date-picker
             v-model="objForm.planEndDate"
-            type="date"
+            type="datetime"
             placeholder="选择计划结束时间"
             :disabled-date="disabledDate"
             :shortcuts="shortcuts"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
           >
           </el-date-picker>
         </el-form-item>
