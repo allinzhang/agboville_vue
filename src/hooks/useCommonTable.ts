@@ -56,7 +56,6 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
   let objForm = reactive(Object.assign({}, obj));
   const infoDialogTitleMap = { create: "新增", update: "编辑" };
   let infoDialogType = ref("create");
-  console.log("objForm", objForm)
 
   const handleFilter = () => {
     listQuery.page = 1;

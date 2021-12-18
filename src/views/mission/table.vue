@@ -28,6 +28,7 @@ import { ProjectUserService } from "../../api/ProjectUserService";
 import CommonTable from '../../components/table/CommonTable.vue';
 
 import { MissionService } from "../../api/MissionService";
+import { missionLevelArr, missionStatusArr } from '../../types/status';
 
 export default defineComponent({
   components: {
@@ -47,50 +48,60 @@ export default defineComponent({
 
     const projectUserList = []
 
-    ProjectUserService.list({projectId: projectId.value}).then(res => {
-      console.log(res)
-      if (res.status === 200 && res.data.code === 0) {
-        // projectUserList.value = res.data.list;
-        res.data.list.forEach(e => {
-          console.log('e', e)
-          projectUserList[e.id] = projectUserList;
-          console.log("projectUserList", projectUserList)
-        });
-      }
-    });
+
+
     let tableOptions = reactive({
       service: MissionService,
       formObj: {
-        name: "",
-        content: "",
-        stageId: "",
-        status: "",
-        assignee: "",
-        level: "",
-        assignee: "",
-        planStartTime: "",
-        planEndTime: "",
+        // name: "",
+        // content: "",
+        // stageId: "",
+        // status: "",
+        // assignee: "",
+        // level: "",
+        // assignee: "",
+        // planStartTime: "",
+        // planEndTime: "",
       },
       formOption: [
-        { label: "项目名称", key: "name", type: "input", placeholder: "请输入项目名称", tableWidth: 160},
-        { label: "负责人", key: "assignee", type: "select", selectList: {}},
-        { label: "优先级", key: "level", type: "select", selectList: [ "紧急", "高", "中", "低" ]},
-        { label: "状态", key: "status", type: "select", selectList: ["任务池", "未开始", "进行中", "已结束", "已取消", "延期", "延误"]},
+        { label: "项目名称", key: "name", type: "input", tableWidth: 160},
+        { label: "负责人", key: "assignee", type: "select", selectList: [], selectType: 1},
+        { label: "优先级", key: "level", type: "select", selectList: missionLevelArr},
+        { label: "状态", key: "status", type: "select", selectList: missionStatusArr},
         { label: "计划开始时间", key: "planStartTime", type: "datetime", tableWidth: 200},
         { label: "计划结束时间", key: "planEndTime", type: "datetime", tableWidth: 200},
         { label: "任务介绍", key: "content", type: "textarea" },
       ],
       tableQuery: [
-        { type: "input", label: "任务名称", key: "name" }
+        { type: "input", label: "任务名称", key: "name" },
+        { type: "select", label: "优先级", key: "level", selectList: missionLevelArr },
+        { type: "select", label: "状态", key: "status", selectList: missionStatusArr },
+        { type: "datetime", label: "计划开始时间", key: "planStartTime"},
+        { type: "datetime", label: "计划结束时间", key: "planEndTime"},
       ],
       detailPath: "/mission/detail",
       tableQueryDefault: {
         projectId,
       } 
     })
-    provide("tableOptions", tableOptions);
+    ProjectUserService.list({projectId: projectId.value}).then(res => {
+      console.log(res)
+      if (res.status === 200 && res.data.code === 0) {
+        res.data.data.list.forEach((e, i) => {
+          // projectUserList[e.id] = e;
+          projectUserList.push({
+            label: e.userId,
+            value: e.userId,
+          })
+          if (i === res.data.data.list.length - 1) {
+            tableOptions.formOption[1].selectList = projectUserList
+            // console.log("tableOptions", tableOptions)
+          }
+        });
+      }
+    });
 
-    
+    provide("tableOptions", tableOptions);
 
     return {
       projectId,
