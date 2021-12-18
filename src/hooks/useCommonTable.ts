@@ -1,5 +1,5 @@
 /**
- * 因表格是常用场景,独立生成
+ * because table is reusable, so change composition
  */
 import { onMounted, ref, reactive, Ref, computed } from "vue";
 import { useRouter } from 'vue-router';
@@ -170,7 +170,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
   const editObj = async (obj: T) => {
     const res: HttpResponse = await service.update(obj);
     if (res.status === 200 && res.data.code === 0) {
-      const index = this.list.findIndex((v: T) => v.id === obj.id);
+      const index = listData.value.findIndex((v: T) => v.id === obj.id);
       listData.value.splice(index, 1, obj);
       ElMessage({ type: "success", message: "修改成功" });
       infoDialogVisible.value = false;
@@ -202,5 +202,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
     objForm: computed(() => objForm),
     infoDialogCancel,
     infoDialogConfirm,
+
+    editObj,
   }
 }

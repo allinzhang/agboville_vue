@@ -10,13 +10,12 @@
 <template>
   <div class="app-container">
     <CommonTable
-      :projectId="projectId"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, provide } from "vue";
+import { computed, defineComponent, ref, provide, reactive } from "vue";
 // vuex
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
@@ -38,67 +37,64 @@ export default defineComponent({
     const store = useStore<ProjectState>();
     const router = useRouter();
     const route = useRoute();
-    console.log("route", route.query);
-    // if (route.query) {
-    //   this.projectId = route.query.id;
-    // }
+
     const projectId = computed(() => store.state.project.projectId);
-    const projectUserList = ref([])
-    
-    const obj: Mission = {
-      name: "",
-      content: "",
-      stageId: "",
-      status: "",
-      assignee: "",
-      level: "",
-      assignee: "",
-      planStartTime: "",
-      planEndTime: "",
+
+    if (!projectId) {
+      router.push("/project/list")
+      return
     }
-    const form = [
-      { label: "项目名称", key: "name", type: "input", placeholder: "请输入项目名称"},
-      { label: "负责人", key: "assignee", type: "select", selectList: [] },
-      { label: "优先级", key: "level", type: "select", selectList: [ "紧急", "高", "中", "低" ] },
-      { label: "状态", key: "status", type: "select", selectList: ["任务池", "未开始", "进行中", "已结束", "已取消", "延期", "延误"] },
-      { label: "计划开始时间", key: "planStartTime", type: "datetime" },
-      { label: "计划结束时间", key: "planEndTime", type: "datetime" },
-      { label: "任务介绍", key: "content", type: "textarea" },
-    ]
-    const tableQuery = [
-      { type: "input", label: "任务名称", key: "name" }
-    ]
-    // provide("formObj", obj);
-    // provide("formOption", form);
-    // provide("tableQuery", tableQuery);
-    provide("tableOptions", {
-      service: MissionService,
-      formObj: obj,
-      formOption: form,
-      tableQuery,
-      detailPath: "/mission/detail",
-    });
+
+    const projectUserList = []
 
     ProjectUserService.list({projectId: projectId.value}).then(res => {
+      console.log(res)
       if (res.status === 200 && res.data.code === 0) {
-        projectUserList.value = res.data.list;
+        // projectUserList.value = res.data.list;
+        res.data.list.forEach(e => {
+          console.log('e', e)
+          projectUserList[e.id] = projectUserList;
+          console.log("projectUserList", projectUserList)
+        });
       }
     });
-    const statusChange = (value, row) => {
-      row.status = value;
-      // this.editObj(row)
-    }
-    const levelChange = (value, row) => {
-      console.log("levelChange", value, row)
-      row.level = value;
-      // this.editObj(row)
-    }
+    let tableOptions = reactive({
+      service: MissionService,
+      formObj: {
+        name: "",
+        content: "",
+        stageId: "",
+        status: "",
+        assignee: "",
+        level: "",
+        assignee: "",
+        planStartTime: "",
+        planEndTime: "",
+      },
+      formOption: [
+        { label: "项目名称", key: "name", type: "input", placeholder: "请输入项目名称", tableWidth: 160},
+        { label: "负责人", key: "assignee", type: "select", selectList: {}},
+        { label: "优先级", key: "level", type: "select", selectList: [ "紧急", "高", "中", "低" ]},
+        { label: "状态", key: "status", type: "select", selectList: ["任务池", "未开始", "进行中", "已结束", "已取消", "延期", "延误"]},
+        { label: "计划开始时间", key: "planStartTime", type: "datetime", tableWidth: 200},
+        { label: "计划结束时间", key: "planEndTime", type: "datetime", tableWidth: 200},
+        { label: "任务介绍", key: "content", type: "textarea" },
+      ],
+      tableQuery: [
+        { type: "input", label: "任务名称", key: "name" }
+      ],
+      detailPath: "/mission/detail",
+      tableQueryDefault: {
+        projectId,
+      } 
+    })
+    provide("tableOptions", tableOptions);
+
+    
 
     return {
       projectId,
       projectUserList,
-      statusChange,
-      levelChange,
     };
   },
   methods: {

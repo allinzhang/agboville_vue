@@ -60,7 +60,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column prop="name" label="项目名" width="180" align="center" >
+      <!-- <el-table-column prop="name" label="项目名" width="180" align="center" >
         <template #default="scope">
           <el-link type="primary" @click.stop="toProjectMissionList(scope.row, scope.index)">{{ scope.row.name || "" }}</el-link>
         </template>
@@ -84,12 +84,6 @@
             </template>
           </el-popover>
         </template>
-        <!-- <template #default="scope">
-          <el-tag v-if="scope.row.status == 0" type="danger">紧急</el-tag>
-          <el-tag v-else-if="scope.row.status == 1" type="warning">高</el-tag>
-          <el-tag v-else-if="scope.row.status == 2" type="success">中</el-tag>
-          <el-tag v-else-if="scope.row.status == 3" type="info">低</el-tag>
-        </template> -->
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80" align="center" >
         <template #default="scope">
@@ -119,43 +113,66 @@
       </el-table-column>
       <el-table-column prop="assignee" label="负责人" width="80" align="center">
         <template #default="scope">
-          <!-- <el-popover effect="light" trigger="hover" placement="top" align="center">
-            <template #default>
-              <p>姓名: {{ scope.row.name }}</p>
-            </template>
-            <template #reference>
-              <div class="name-wrapper">
-                <el-tag size="medium">{{ scope.row.assignee }}</el-tag>
-              </div>
-            </template>
-          </el-popover> -->
-          <!-- <el-popover placement="bottom" :width="200" trigger="click">
-            <el-select v-model="scope.row.assignee" placeholder="选择项目负责人" @change="assigneeChange($event, scope.row)">
-              <el-option
-                v-for="assignItem in scope.row.userList"
-                :key="assignItem.id"
-                :label="assignItem.userNickname"
-                :value="assignItem.userId"
-              >
-                <span style="float: left">{{ assignItem.userNickname }}</span>
-                <span
-                  style="
-                    float: right;
-                    color: var(--el-text-color-secondary);
-                    font-size: 13px;
-                  "
-                  >{{ assignItem.duty || "" }}</span
-                >
-              </el-option>
-            </el-select>
-            <template #reference>
-              <el-avatar :size="36" :src="scope.row.assigneeInfo.avatar"></el-avatar>
-            </template>
-          </el-popover> -->
         </template>
       </el-table-column>
       <el-table-column prop="planStartTime" label="计划开始时间" width="120" align="center" />
-      <el-table-column prop="planEndTime" label="计划结束时间" width="120" align="center" />
+      <el-table-column prop="planEndTime" label="计划结束时间" width="120" align="center" /> -->
+      <template
+         v-for="(item, index) in tableForm"
+        :key="index"
+      >
+        <el-table-column
+          v-if="item.type != 'textarea'"
+          :prop="item.key"
+          :label="item.label"
+          :width="item.tableWidth ? item.tableWidth : 120"
+          align="center"
+        >
+          <template #default="scope">
+            <template v-if="item.type === 'input'">
+              {{scope.row[item.key]}}
+            </template>
+            <template v-if="item.type === 'select'">
+              <el-popover placement="bottom" :width="200" trigger="click">
+                <el-select
+                    v-model="scope.row[item.key]"
+                    :placeholder="'请选择' + item.label"
+                    @change="changeRow($event, scope.row)"
+                >
+                  <el-option v-for="(selectItem, selectIndex) in item.selectList" :key="selectIndex" :label="selectItem" :value="selectIndex"></el-option>
+                </el-select>
+                <template #reference>
+                  <el-tag type="success" v-if="scope.row[item.key]">{{item.selectList[scope.row[item.key]]}}</el-tag>
+                  <el-tag type="info" v-else>未设置</el-tag>
+                </template>
+              </el-popover>
+            </template>
+            <template v-if="item.type === 'datetime'">
+              <!-- <el-popover placement="bottom" :width="200" trigger="click">
+                <template #reference>
+                  {{scope.row[item.key]}}
+                </template>
+              </el-popover> -->
+              <el-popover placement="bottom" :width="260" trigger="click">
+                <el-date-picker
+                  v-model="scope.row[item.key]"
+                  type="datetime"
+                  :placeholder="'请选择' + item.label"
+                  format="YYYY-MM-DD HH:mm:ss"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  @change="changeRow($event, scope.row)"
+                >
+                </el-date-picker>
+                <template #reference>
+                  <div style="height: 20px;width: 100%">
+                    {{scope.row[item.key] || ""}}
+                  </div>
+                </template>
+              </el-popover>
+            </template>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column label="操作" width="260" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button
@@ -254,20 +271,22 @@ import { defineComponent, inject } from "vue";
 import useCommonTable from '../../hooks/useCommonTable';
 
 export default defineComponent({
-  setup(props) {
+  setup(props, { emit }) {
     const tableOptions = inject("tableOptions");
 
     const {
       listLoading, listData, listTotal, listQuery,
       downloadLoading, handleFilter, handleCreate, handleEdit, handleDelete, handleMore, handleDownload, handleDetail,
-      infoDialogVisible, objForm, infoDialogCancel, infoDialogConfirm, infoDialogType, infoDialogTitleMap
+      infoDialogVisible, objForm, infoDialogCancel, infoDialogConfirm, infoDialogType, infoDialogTitleMap, editObj
     } = useCommonTable(tableOptions.formObj, tableOptions.service, {
-      listQuery: {
-        projectId: props.projectId
-      },
+      listQuery: Object.assign({}, tableOptions.tableQueryDefault),
       detailPath: tableOptions.detailPath
     })
 
+    const changeRow = (value, row) => {
+      console.log("changeRow", value, row)
+      editObj(row);
+    }
     return {
       tableQuery: tableOptions.tableQuery,
       tableForm: tableOptions.formOption,
@@ -279,6 +298,7 @@ export default defineComponent({
       listData,
       listTotal,
       listQuery,
+      
       handleFilter,
       handleCreate,
       handleEdit,
@@ -292,6 +312,8 @@ export default defineComponent({
       infoDialogType,
       infoDialogCancel,
       infoDialogConfirm,
+
+      changeRow,
     }
   }
 })
