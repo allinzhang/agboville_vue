@@ -1,7 +1,7 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-15 23:00:12
+ * @LastEditTime: 2021-12-19 15:44:47
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/views/project/list.vue
@@ -9,7 +9,11 @@
 -->
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <CommonTable
+      @toProjectUserPage="toProjectUserPage"
+      @toProjectDetailPage="toProjectDetailPage"
+    />
+    <!-- <div class="filter-container">
       <el-input
         v-model="listQuery.name"
         placeholder="项目名"
@@ -17,23 +21,12 @@
         class="filter-item"
         @keyup.enter="handleFilter"
       />
-      <!-- <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select> -->
-      <!-- <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
-      </el-select> -->
-      <!-- <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select> -->
-      <!-- v-waves -->
       <el-button
         class="filter-item"
         type="primary"
         style="margin-left: 10px"
         @click="handleFilter"
       >
-        <!-- :icon="Search" -->
         搜索
       </el-button>
       <el-button
@@ -42,7 +35,6 @@
         style="margin-left: 10px"
         @click="handleCreate"
       >
-        <!-- :icon="CirclePlus" -->
         添加
       </el-button>
       <el-button
@@ -52,15 +44,8 @@
         style="margin-left: 10px"
         @click="handleDownload"
       >
-        <!-- :icon="TopRight" -->
         导出
       </el-button>
-      <!-- <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        导出
-      </el-button> -->
-      <!-- <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        reviewer
-      </el-checkbox> -->
     </div>
 
     <el-table
@@ -76,7 +61,6 @@
           <el-link type="primary" @click.stop="toProjectMissionList(scope.row, scope.index)">{{ scope.row.name || "" }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="content" label="内容" min-width="150px" />
       <el-table-column prop="stageId" label="当前阶段" width="100" align="center">
         <template #default="scope">
           <template
@@ -100,14 +84,6 @@
       </el-table-column>
       <el-table-column prop="assigneeInfo" label="负责人" width="80" align="center">
         <template #default="scope">
-          <!-- <el-popover effect="light" trigger="hover" placement="top" align="center" v-if="scope.row.assigneeInfo">
-            <template #default>
-              <p>姓名: {{ scope.row.assigneeInfo.name }}</p>
-            </template>
-            <template #reference>
-              <el-avatar :size="36" :src="scope.row.assigneeInfo.avatar"></el-avatar>
-            </template>
-          </el-popover> -->
           <el-popover placement="bottom" :width="200" trigger="click">
             <el-select v-model="scope.row.assignee" placeholder="选择项目负责人" @change="assigneeChange($event, scope.row)">
               <el-option
@@ -178,7 +154,6 @@
       :limit="listQuery.limit"
       @pagination="getList"
     />
-    <!-- 新增/修改弹窗 -->
     <el-dialog
       v-model="dialogFormVisible"
       :title="dialogTitleMap[dialogStatus]"
@@ -254,69 +229,116 @@
           </el-button>
         </span>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, provide } from "vue";
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 // import { Options, Vue } from "vue-class-component";
 // import { ref } from "vue";
 
-import { ElMessageBox, ElMessage } from "element-plus";
-// import { Search, CirclePlus, TopRight } from '@element-plus/icons'
+// import { ElMessageBox, ElMessage } from "element-plus";
+// // import { Search, CirclePlus, TopRight } from '@element-plus/icons'
 
+// import { HttpResponse } from "../../types/http";
+// import { Project } from "../../types/project";
+
+// import { ExcelService } from "../../static/utils/exportToExcel";
+
+// import { ProjectState } from "../../store/modules/project";
+
+import CommonTable from '../../components/table/CommonTable.vue';
 import { ProjectService } from "../../api/ProjectService";
-import { HttpResponse } from "../../types/http";
-import { Project } from "../../types/project";
-
-import { ExcelService } from "../../static/utils/exportToExcel";
-
-import { ProjectState } from "../../store/modules/project";
 
 // @Options({
 //   components: {},
 // })
 // export default class ProjectList extends Vue {
 export default defineComponent({
-  data() {
-    return {
+  components: {
+    CommonTable
+  },
+  // data() {
+  //   return {
       // Search,
       // CirclePlus,
       // TopRight,
-      list: [], // 表格数据
-      total: 0, // 表格总数
-      listLoading: true, // 是否显示表格加载
-      dialogFormVisible: false, // 是否显示新增修改弹窗
-      downloadLoading: false, // 是否正在导出
-      listQuery: {
-        page: 1,
-        limit: 20,
-        sort: "id",
-        name: undefined,
-      },
-      dialogTitleMap: {
-        create: "新增",
-        update: "修改",
-      }, // 弹窗标题
-      dialogStatus: "create", // 弹窗类型
-      objForm: {
-        name: "",
-        content: "",
-        assignee: "",
-        planStartDate: "",
-        planEndDate: "",
-      },
-    };
-  },
-  mounted() {
-    this.getList();
-  },
+      // list: [], // 表格数据
+      // total: 0, // 表格总数
+      // listLoading: true, // 是否显示表格加载
+      // dialogFormVisible: false, // 是否显示新增修改弹窗
+      // downloadLoading: false, // 是否正在导出
+      // listQuery: {
+      //   page: 1,
+      //   limit: 20,
+      //   sort: "id",
+      //   name: undefined,
+      // },
+      // dialogTitleMap: {
+      //   create: "新增",
+      //   update: "修改",
+      // }, // 弹窗标题
+      // dialogStatus: "create", // 弹窗类型
+      // objForm: {
+      //   name: "",
+      //   content: "",
+      //   assignee: "",
+      //   planStartDate: "",
+      //   planEndDate: "",
+      // },
+    // };
+  // },
+  // mounted() {
+    // this.getList();
+  // },
   setup() {
     const router = useRouter();
     const store = useStore<ProjectState>();
+
+    let tableOptions = reactive({
+      service: ProjectService,
+      formObj: {
+        // name: "",
+        // content: "",
+        // stageId: "",
+        // status: "",
+        // assignee: "",
+        // level: "",
+        // assignee: "",
+        // planStartTime: "",
+        // planEndTime: "",
+      },
+      formOption: [
+        { label: "项目名称", key: "name", type: "input", tableWidth: 160},
+        { label: "当前阶段", key: "stageName", type: "input", selectList: [], selectType: 1},
+        // { label: "状态", key: "status", type: "select", selectList: []},
+        { label: "负责人", key: "assigneeInfo", type: "image", objKey: "avatar"},
+        { label: "项目成员", key: "userList", type: "images", listKey: "userAvator"},
+        // { label: "优先级", key: "level", type: "select", selectList: missionLevelArr},
+        { label: "计划开始时间", key: "planStartDate", type: "datetime", tableWidth: 200},
+        { label: "计划结束时间", key: "planEndDate", type: "datetime", tableWidth: 200},
+        { label: "项目介绍", key: "content", type: "textarea" },
+      ],
+      tableQuery: [
+        { type: "input", label: "任务名称", key: "name" },
+        // { type: "select", label: "优先级", key: "level", selectList: missionLevelArr },
+        // { type: "select", label: "状态", key: "status", selectList: missionStatusArr },
+        { type: "datetime", label: "计划开始时间", key: "planStartTime"},
+        { type: "datetime", label: "计划结束时间", key: "planEndTime"},
+      ],
+      tableBtn: [
+        { name: "添加成员", classType: "info", eventName: "toProjectUserPage" },
+        { name: "详情", classType: "primary", eventName: "toProjectDetailPage" },
+      ]
+      // detailPath: "/mission/detail",
+      // tableQueryDefault: {
+      //   projectId,
+      // } 
+    })
+    provide("tableOptions", tableOptions);
     // const links = Ref([]);
     // console.log("links", links);
     // const querySearchUser = (queryString: string, cb: (arg: any) => void) => {
@@ -326,148 +348,156 @@ export default defineComponent({
     //   ];
     //   cb(results);
     // };
-    console.log(store)
-    const toProjectMissionList = (row: Project) => {
-      if (row.id) {
-        store.dispatch("SET_PROJECT_ID", row.id);
-        router.push({
-          path: "/mission/table",
-          query: {
-            id: row.id,
-          },
-        });
-      }
+    // console.log(store)
+    // const toProjectMissionList = (row: Project) => {
+    //   if (row.id) {
+    //     store.dispatch("SET_PROJECT_ID", row.id);
+    //     router.push({
+    //       path: "/mission/table",
+    //       query: {
+    //         id: row.id,
+    //       },
+    //     });
+    //   }
+    // }
+    const toProjectUserPage = (row) => {
+      console.log("toProjectUserPage", row)
+    }
+    const toProjectDetailPage = (row) => {
+      console.log("toProjectDetailPage", row)
     }
     return {
       // state: ref(''),
       // querySearchUser,
-      toProjectMissionList,
+      // toProjectMissionList,
+      toProjectUserPage,
+      toProjectDetailPage,
     };
   },
   methods: {
-    async getList() {
-      this.listLoading = true;
-      const res: HttpResponse = await ProjectService.list(this.listQuery);
-      if (res.status === 200 && res.data.code === 0) {
-        this.list = res.data.data.list;
-        this.total = res.data.data.total;
-        setTimeout(() => {
-          this.listLoading = false;
-        }, 1000);
-      }
-    },
-    handleFilter(): void {
-      this.listQuery.page = 1;
-      this.getList();
-    },
-    handleCreate(): void {
-      this.clearObjForm();
-      this.dialogStatus = "create";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["objForm"].clearValidate();
-      })
-    },
-    handleEdit(row: Project): void {
-      this.objForm = Object.assign({}, row);
-      this.dialogStatus = "update";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["objForm"].clearValidate();
-      })
-    },
-    clearObjForm(): void {
-      this.objForm = {
-        name: "",
-        content: "",
-        assignee: "",
-        planStartDate: "",
-        planEndDate: "",
-      };
-    },
-    dialogFormConfirm(): void {
-      console.log("dialogFormConfirm", this.objForm);
-      this.$refs["objForm"].validate((valid: any) => {
-        if(valid) {
-          if (this.dialogStatus === "create") {
-            this.createProject(this.objForm);
-          } else if (this.dialogStatus === "update") {
-            // this.objForm.id = "";
-            this.editProject(this.objForm);
-          }
-        }
-      })
-    },
-    handleSelectUser(): void {
-      console.log("handleSelectUser")
-    },
+    // async getList() {
+    //   this.listLoading = true;
+    //   const res: HttpResponse = await ProjectService.list(this.listQuery);
+    //   if (res.status === 200 && res.data.code === 0) {
+    //     this.list = res.data.data.list;
+    //     this.total = res.data.data.total;
+    //     setTimeout(() => {
+    //       this.listLoading = false;
+    //     }, 1000);
+    //   }
+    // },
+    // handleFilter(): void {
+    //   this.listQuery.page = 1;
+    //   this.getList();
+    // },
+    // handleCreate(): void {
+    //   this.clearObjForm();
+    //   this.dialogStatus = "create";
+    //   this.dialogFormVisible = true;
+    //   this.$nextTick(() => {
+    //     this.$refs["objForm"].clearValidate();
+    //   })
+    // },
+    // handleEdit(row: Project): void {
+    //   this.objForm = Object.assign({}, row);
+    //   this.dialogStatus = "update";
+    //   this.dialogFormVisible = true;
+    //   this.$nextTick(() => {
+    //     this.$refs["objForm"].clearValidate();
+    //   })
+    // },
+    // clearObjForm(): void {
+    //   this.objForm = {
+    //     name: "",
+    //     content: "",
+    //     assignee: "",
+    //     planStartDate: "",
+    //     planEndDate: "",
+    //   };
+    // },
+    // dialogFormConfirm(): void {
+    //   console.log("dialogFormConfirm", this.objForm);
+    //   this.$refs["objForm"].validate((valid: any) => {
+    //     if(valid) {
+    //       if (this.dialogStatus === "create") {
+    //         this.createProject(this.objForm);
+    //       } else if (this.dialogStatus === "update") {
+    //         // this.objForm.id = "";
+    //         this.editProject(this.objForm);
+    //       }
+    //     }
+    //   })
+    // },
+    // handleSelectUser(): void {
+    //   console.log("handleSelectUser")
+    // },
     
-    handleDetail(row: Project): void {
-      if (row.id) {
-        this.$router.push("/project/detail", {
-          id: row.id,
-        });
-      }
-    },
-    handleDelete(row: Project, index: number): void {
-      ElMessageBox.confirm(`确认删除${row.name}项目?`, "确认操作", {
-        confirmButtonText: "删除",
-      }).then(() => {
-        this.deleteObj(row, index);
-      });
-    },
-    handleDownload(): void {
-      this.downloadLoading = true;
-      const excelService = new ExcelService();
-      excelService.exportAsExcelFile(this.list, "项目列表");
-      this.downloadLoading = false;
-    },
-    async createProject(project: Project) {
-      console.log("project", project);
-      const res: HttpResponse = await ProjectService.create(project);
-      if (res.status === 200 && res.data.code === 0) {
-        ElMessage({ type: "success", message: "新增成功" });
-        this.list.unshift(project);
-        this.dialogFormVisible = false;
-      } else {
-        ElMessage.error(res.data.msg || "新增失败");
-      }
-    },
-    async editProject(project: Project) {
-      const res: HttpResponse = await ProjectService.update(project);
-      if (res.status === 200 && res.data.code === 0) {
-        const index = this.list.findIndex((v: Project) => v.id === project.id);
-        this.list.splice(index, 1, project);
-        ElMessage({ type: "success", message: "修改成功" });
-        this.dialogFormVisible = false;
-      } else {
-        ElMessage.error(res.data.msg || "修改失败");
-      }
-    },
-    async deleteObj(row: Project, index: number) {
-      const res: HttpResponse = await ProjectService.delete({
-        projectId: row.id,
-      });
-      if (res.status === 200 && res.data.code === 0) {
-        this.list.splice(index, 1);
-        ElMessage({ type: "success", message: "删除成功" });
-      } else {
-        ElMessage.error(res.data.msg || "修改失败");
-      }
-    },
-    assigneeChange(newAssigneeId: number, row: Project): void {
-      console.log("assigneeChange", newAssigneeId, row);
-    },
-    handleMember(row: Project, index: number) {
-      if (row.id) {
-        this.$router.push({
-          path: "/project/member",
-          query: {
-            id: row.id,
-          },
-        });
-      }
-    }
+    // handleDetail(row: Project): void {
+    //   if (row.id) {
+    //     this.$router.push("/project/detail", {
+    //       id: row.id,
+    //     });
+    //   }
+    // },
+    // handleDelete(row: Project, index: number): void {
+    //   ElMessageBox.confirm(`确认删除${row.name}项目?`, "确认操作", {
+    //     confirmButtonText: "删除",
+    //   }).then(() => {
+    //     this.deleteObj(row, index);
+    //   });
+    // },
+    // handleDownload(): void {
+    //   this.downloadLoading = true;
+    //   const excelService = new ExcelService();
+    //   excelService.exportAsExcelFile(this.list, "项目列表");
+    //   this.downloadLoading = false;
+    // },
+    // async createProject(project: Project) {
+    //   console.log("project", project);
+    //   const res: HttpResponse = await ProjectService.create(project);
+    //   if (res.status === 200 && res.data.code === 0) {
+    //     ElMessage({ type: "success", message: "新增成功" });
+    //     this.list.unshift(project);
+    //     this.dialogFormVisible = false;
+    //   } else {
+    //     ElMessage.error(res.data.msg || "新增失败");
+    //   }
+    // },
+    // async editProject(project: Project) {
+    //   const res: HttpResponse = await ProjectService.update(project);
+    //   if (res.status === 200 && res.data.code === 0) {
+    //     const index = this.list.findIndex((v: Project) => v.id === project.id);
+    //     this.list.splice(index, 1, project);
+    //     ElMessage({ type: "success", message: "修改成功" });
+    //     this.dialogFormVisible = false;
+    //   } else {
+    //     ElMessage.error(res.data.msg || "修改失败");
+    //   }
+    // },
+    // async deleteObj(row: Project, index: number) {
+    //   const res: HttpResponse = await ProjectService.delete({
+    //     projectId: row.id,
+    //   });
+    //   if (res.status === 200 && res.data.code === 0) {
+    //     this.list.splice(index, 1);
+    //     ElMessage({ type: "success", message: "删除成功" });
+    //   } else {
+    //     ElMessage.error(res.data.msg || "修改失败");
+    //   }
+    // },
+    // assigneeChange(newAssigneeId: number, row: Project): void {
+    //   console.log("assigneeChange", newAssigneeId, row);
+    // },
+    // handleMember(row: Project, index: number) {
+    //   if (row.id) {
+    //     this.$router.push({
+    //       path: "/project/member",
+    //       query: {
+    //         id: row.id,
+    //       },
+    //     });
+    //   }
+    // }
   }
 })
 </script>

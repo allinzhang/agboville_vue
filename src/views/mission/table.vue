@@ -104,8 +104,8 @@ export default defineComponent({
     provide("tableOptions", tableOptions);
 
     return {
-      projectId,
-      projectUserList,
+      // projectId,
+      // projectUserList,
     };
   },
   methods: {

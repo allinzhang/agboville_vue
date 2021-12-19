@@ -1,7 +1,7 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-18 17:31:52
+ * @LastEditTime: 2021-12-19 15:45:15
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/components/table/CommonTable.vue
@@ -146,16 +146,26 @@
                 </template>
               </el-popover>
             </template>
+            <template v-if="item.type === 'images'">
+              <template v-for="(imgItem, imgIndex) in scope.row[item.key]" :key="imgIndex">
+                <el-avatar :size="36" :src="imgItem[item.listKey]"></el-avatar>
+              </template>
+            </template>
+            <template v-if="item.type === 'image'">
+              <el-avatar :size="36" :src="item.objKey ? scope.row[item.key][item.objKey] : scope.row[item.key]"></el-avatar>
+            </template>
           </template>
         </el-table-column>
       </template>
-      <el-table-column label="操作" width="260" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" :width="tableBtn.length * 80 + 200" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button
-            type="primary"
+            v-for="(item, index) in tableBtn"
+            :key="index"
+            :type="item.classType"
             size="mini"
-            @click="handleDetail(scope.row, scope.$index)"
-            >详情</el-button>
+            @click.stop="toEmitEvent(item.eventName, scope.row)"
+            >{{item.name || ""}}</el-button>
           <el-button
             type="success"
             size="mini"
@@ -250,6 +260,25 @@ import { Search, CirclePlus, TopRight } from "@element-plus/icons-vue";
 
 import useCommonTable from '../../hooks/useCommonTable';
 
+interface CommonTableFormOption{
+  label: string;
+  key: string;
+  type: string; // column type (input/image/images/textarea/datatime)
+  tableWidth: number; // table column width
+  objKey: string; // if type=image and data is Object
+  listKey: string; // if type=images and data is Array
+  selectType: number; // value = 0 is ["success", "fail"], value = 1 is [{label, value}]
+  selectList: Array<T>; // edit data
+}
+
+/**
+ * public tabke
+ * @Param service Object Service Class(list/create/update/delete)
+ * @Param formObj Array object configuration
+ * @Param formOption Array<CommonTableFormOption> table column configuration
+ * @Param tableQuery Object list or detail must post data
+ * @Param tableBtn
+ */
 export default defineComponent({
   setup(props, { emit }) {
     const tableOptions = inject("tableOptions");
@@ -275,7 +304,7 @@ export default defineComponent({
           return date
         },
       }
-    ]
+    ] // 日历插件快捷选择配置
     const {
       listLoading, listData, listTotal, listQuery,
       downloadLoading, handleFilter, handleCreate, handleEdit, handleDelete, handleMore, handleDownload, handleDetail,
@@ -286,14 +315,17 @@ export default defineComponent({
     })
 
     const changeRow = (value, row) => {
-      console.log("changeRow", value, row)
       editObj(row);
+    }
+    const toEmitEvent = (eventName, row) => {
+      emit(eventName, row)
     }
     return {
       datePickerShortcut,
 
       tableQuery: tableOptions.tableQuery,
       tableForm: tableOptions.formOption,
+      tableBtn: tableOptions.tableBtn,
       Search,
       CirclePlus,
       TopRight,
@@ -318,6 +350,7 @@ export default defineComponent({
       infoDialogConfirm,
 
       changeRow,
+      toEmitEvent,
     }
   }
 })
