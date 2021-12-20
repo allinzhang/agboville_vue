@@ -1,28 +1,145 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-03 17:09:51
+ * @LastEditTime: 2021-12-20 21:21:44
  * @LastEditors: allin.zhang
  * @Description: 
- * @FilePath: /agboville_user_vue/src/views/dashboard/index.vue
+ * @FilePath: /agboville_web_vite/src/views/user/info.vue
  * 可以输入预定的版权声明、个性签名、空行等
 -->
 <template>
-  <div>
+  <div class="app-container">
+    <el-row>
+      <el-col :span="12">
+        <el-form
+          ref="userForm"
+          :model="ruleForm"
+          :rules="rules"
+          label-width="120px"
+          class="demo-ruleForm"
+        >
+          <el-form-item label="真实姓名" prop="name">
+            <el-input v-model="ruleForm.name"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="Activity zone" prop="region">
+            <el-select v-model="ruleForm.region" placeholder="Activity zone">
+              <el-option label="Zone one" value="shanghai"></el-option>
+              <el-option label="Zone two" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Activity time" required>
+            <el-col :span="11">
+              <el-form-item prop="date1">
+                <el-date-picker
+                  v-model="ruleForm.date1"
+                  type="date"
+                  placeholder="Pick a date"
+                  style="width: 100%"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col class="line" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="date2">
+                <el-time-picker
+                  v-model="ruleForm.date2"
+                  placeholder="Pick a time"
+                  style="width: 100%"
+                ></el-time-picker>
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="Instant delivery" prop="delivery">
+            <el-switch v-model="ruleForm.delivery"></el-switch>
+          </el-form-item>
+          <el-form-item label="Resources" prop="resource">
+            <el-radio-group v-model="ruleForm.resource">
+              <el-radio label="Sponsorship"></el-radio>
+              <el-radio label="Venue"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="Activity form" prop="desc">
+            <el-input v-model="ruleForm.desc" type="textarea"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('userForm')"
+              >Create</el-button
+            >
+            <el-button @click="resetForm('userForm')">Reset</el-button>
+          </el-form-item> -->
+        </el-form>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, ref, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import User from '../../types/user';
+
 export default defineComponent({
-  setup() {
+  setup(props, { refs }) {
     const router = useRouter();
     const store = useStore();
-    return {
+    const userForm = ref(null)
+    const ruleForm = ref({
+      // name: '',
+      // region: '',
+      // date1: '',
+      // date2: '',
+      // delivery: false,
+      // type: [],
+      // resource: '',
+      // desc: '',
+    })
+    const rules = {
+      // name: [
+      //   { required: true, message: 'Please input Activity name', trigger: 'blur' },
+      //   { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+      // ],
+      // region: [
+      //   { required: true, message: 'Please select Activity zone', trigger: 'change' },
+      // ],
+      // date1: [
+      //   { type: 'date', required: true, message: 'Please pick a date', trigger: 'change' },
+      // ],
+      // date2: [
+      //   { type: 'date', required: true, message: 'Please pick a time', trigger: 'change' },
+      // ],
+      // type: [
+      //   { type: 'array', required: true, message: 'Please select at least one activity type', trigger: 'change' },
+      // ],
+      // resource: [
+      //   { required: true, message: 'Please select activity resource', trigger: 'change' },
+      // ],
+      // desc: [
+      //   { required: true, message: 'Please input activity form', trigger: 'blur' },
+      // ],
+    }
+    const submitForm = (formName) => {
+      userForm.value.validate((valid) => {
+        if (valid) {
+          
+        } else {
+          return false
+        }
+      })
+    }
+    const resetForm = (formName) => {
+      userForm.value.resetFields()
+    }
+    onMounted(() => {
 
+    })
+    return {
+      userForm,
+      ruleForm,
+      rules,
+      submitForm,
+      resetForm,
     }
   }
 })

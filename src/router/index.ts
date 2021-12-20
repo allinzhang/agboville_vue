@@ -1,7 +1,7 @@
 /*
  * @Author: allin.zhang
  * @Date: 2021-12-03 15:58:15
- * @LastEditTime: 2021-12-14 21:32:41
+ * @LastEditTime: 2021-12-19 16:15:08
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/router/index.ts
@@ -105,6 +105,19 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/mission/timeline.vue"),
         name: "MissionTimeline",
         meta: { title: "任务管理", icon: "timeline", affix: true },
+      },
+    ],
+  },
+  {
+    path: "/user",
+    component: Layout,
+    redirect: "/user/info",
+    children: [
+      {
+        path: "info",
+        component: () => import("../views/user/info.vue"),
+        name: "UserInfo",
+        meta: { title: "用户信息", icon: "member", affix: true },
       },
     ],
   },

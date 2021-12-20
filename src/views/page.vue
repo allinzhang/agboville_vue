@@ -8,7 +8,7 @@
  * 可以输入预定的版权声明、个性签名、空行等
 -->
 <template>
-  <div>
+  <div class="app-container">
   </div>
 </template>
 

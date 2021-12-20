@@ -24,7 +24,7 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>个人信息</el-dropdown-item>
+            <el-dropdown-item @click.stop="toUserInfoPage">个人信息</el-dropdown-item>
             <el-dropdown-item divided>登出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -38,6 +38,7 @@
 import { computed, defineComponent, ref, computed } from "vue";
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 // import { mapGetters } from 'vuex'
 // import Breadcrumb from '@/components/Breadcrumb'
 // import Hamburger from '@/components/Hamburger'
@@ -68,9 +69,15 @@ import { useStore } from 'vuex';
 export default defineComponent({
   setup() {
     const store = useStore();
+    const router = useRouter();
+
     const isProjectMenu = computed(() => store.state.project.isProjectMenu);
+    const toUserInfoPage = () => {
+      router.push("/user/info")
+    }
     return {
-      isProjectMenu
+      isProjectMenu,
+      toUserInfoPage
     }
   },
   watch() {

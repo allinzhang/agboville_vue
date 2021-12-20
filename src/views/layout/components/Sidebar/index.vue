@@ -1,5 +1,6 @@
 <template>
-  <div :class="{ 'has-logo': showLogo }">
+<!-- :class="{ 'has-logo': showLogo }" -->
+  <div >
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -13,20 +14,12 @@
         mode="vertical"
         router
       >
-        <!-- <SidebarItem
-          v-for="(route, index) in menuList"
-          :key="index"
-          :item="route"
-          :index="index"
-          :base-path="route.path"
-        ></SidebarItem> -->
         <el-sub-menu
           v-for="(route, index) in menuList"
           :key="route.path"
           :index="route.path"
         >
           <template #title>
-            <!-- <el-icon><location /></el-icon> -->
             <span>{{ route.title || "" }}</span>
           </template>
           <el-menu-item
