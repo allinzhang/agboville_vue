@@ -102,7 +102,8 @@
         >
           <template #default="scope">
             <template v-if="item.type === 'input'">
-              {{scope.row[item.key]}}
+              <el-link v-if="item.link" type="primary" @click.stop="toLink(scope.row, item)">{{ scope.row[item.key] || "" }}</el-link>
+              <span v-else>{{scope.row[item.key]}}</span>
             </template>
             <template v-if="item.type === 'select'">
               <el-popover placement="bottom" :width="200" trigger="click">
@@ -159,13 +160,16 @@
       </template>
       <el-table-column label="操作" :width="tableBtn.length * 80 + 200" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button
-            v-for="(item, index) in tableBtn"
-            :key="index"
-            :type="item.classType"
-            size="mini"
-            @click.stop="toEmitEvent(item.eventName, scope.row)"
-            >{{item.name || ""}}</el-button>
+          <template v-if="tableBtn.length > 0">
+            <el-button
+              v-for="(item, index) in tableBtn"
+              :key="index"
+              :type="item.classType"
+              size="mini"
+              @click.stop="toEmitEvent(item.eventName, scope.row)"
+              >{{item.name || ""}}
+            </el-button>
+          </template>
           <el-button
             type="success"
             size="mini"
@@ -257,6 +261,7 @@
 import { defineComponent, inject } from "vue";
 
 import { Search, CirclePlus, TopRight } from "@element-plus/icons-vue";
+import { useRouter } from 'vue-router';
 
 import useCommonTable from '../../hooks/useCommonTable';
 
@@ -281,6 +286,7 @@ interface CommonTableFormOption{
  */
 export default defineComponent({
   setup(props, { emit }) {
+    const router = useRouter();
     const tableOptions = inject("tableOptions");
 
     const datePickerShortcut = [
@@ -320,6 +326,19 @@ export default defineComponent({
     const toEmitEvent = (eventName, row) => {
       emit(eventName, row)
     }
+    const toLink = (row, options) => {
+      let obj = {};
+      if (options.linkParam) {
+        for (let key of options.linkParam) {
+          obj[key] = row[key];
+        }
+      }
+      console.log(options.link, obj)
+      router.push({
+        path: options.link,
+        query: obj
+      })
+    }
     return {
       datePickerShortcut,
 
@@ -351,6 +370,7 @@ export default defineComponent({
 
       changeRow,
       toEmitEvent,
+      toLink,
     }
   }
 })

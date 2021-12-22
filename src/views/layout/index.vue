@@ -33,7 +33,8 @@
 
 <script lang="ts">
 // import { Options, Vue } from "vue-class-component";
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
+import { useStore } from 'vuex';
 // import { computed } from "vue";
 // import { useStore } from "vuex";
 // import { StateProps } from "../../store";
@@ -42,6 +43,8 @@ import { defineComponent } from "vue";
 import AppMain from "./components/AppMain.vue";
 import Sidebar from "./components/Sidebar/index.vue";
 import Navbar from "./components/Navbar.vue";
+
+
 // import RightPanel from '@/components/RightPanel'
 // import ResizeMixin from './mixin/ResizeHandler.js'
 // import { mapState } from 'vuex'
@@ -65,8 +68,11 @@ export default defineComponent({
     Sidebar,
   },
   setup() {
+    const store = useStore();
     // const store = useStore<StateProps>();
     // const userId = computed(() => store.state.user.userId);
+    
+    
     return {
       // userId,
       classObj: {

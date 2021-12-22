@@ -16,11 +16,9 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img
-            src="https://picsum.photos/id/1062/200/200"
-            class="user-avatar"
-          />
-          <el-icon class="el-icon--right"><arrow-down /></el-icon>
+          <img :src="userInfo.avatar" class="user-avatar" />
+          <span class='user-name'>{{userInfo.nickname || ""}}</span>
+          <el-icon :size="6"><arrow-down-bold /></el-icon>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
@@ -39,6 +37,8 @@ import { computed, defineComponent, ref, computed } from "vue";
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { ArrowDownBold } from "@element-plus/icons-vue";
+
 // import { mapGetters } from 'vuex'
 // import Breadcrumb from '@/components/Breadcrumb'
 // import Hamburger from '@/components/Hamburger'
@@ -67,16 +67,21 @@ import { useRouter } from 'vue-router';
 // })
 // export default class Layout extends Vue {
 export default defineComponent({
+  components: {
+    ArrowDownBold,
+  },
   setup() {
     const store = useStore();
     const router = useRouter();
 
     const isProjectMenu = computed(() => store.state.project.isProjectMenu);
+    const userInfo = computed(() => store.state.user.userInfo);
     const toUserInfoPage = () => {
       router.push("/user/info")
     }
     return {
       isProjectMenu,
+      userInfo,
       toUserInfoPage
     }
   },
@@ -177,14 +182,17 @@ export default defineComponent({
           height: 40px;
           border-radius: 10px;
         }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+        .user-name{
+          font-size: 16px;
+          color: #666;
         }
+        // .el-icon-caret-bottom {
+        //   cursor: pointer;
+        //   position: absolute;
+        //   right: -20px;
+        //   top: 25px;
+        //   font-size: 12px;
+        // }
       }
     }
   }

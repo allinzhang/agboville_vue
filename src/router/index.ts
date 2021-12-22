@@ -57,6 +57,12 @@ const routes: Array<RouteRecordRaw> = [
         name: "ProjectMember",
         meta: { title: "项目成员", icon: "member", affix: true },
       },
+      {
+        path: "detail",
+        component: () => import("../views/project/detail.vue"),
+        name: "ProjectDetail",
+        meta: { title: "项目详情", icon: "detail", affix: true },
+      },
     ],
   },
   {

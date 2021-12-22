@@ -87,3 +87,17 @@ export function isArray(arg: Array<any> | string): boolean {
   }
   return Array.isArray(arg);
 }
+
+// 表单数字验证
+export function checkNumber(rule: string, value: string, callback: Function) {
+  if (!value) {
+    return callback(new Error('请输入'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error('请输入正确数值'))
+    } else {
+      callback()
+    }
+  }, 1000)
+}

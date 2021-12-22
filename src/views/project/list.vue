@@ -312,7 +312,7 @@ export default defineComponent({
         // planEndTime: "",
       },
       formOption: [
-        { label: "项目名称", key: "name", type: "input", tableWidth: 160},
+        { label: "项目名称", key: "name", type: "input", tableWidth: 160, link: '/project/detail', linkParam: ["id"]},
         { label: "当前阶段", key: "stageName", type: "input", selectList: [], selectType: 1},
         // { label: "状态", key: "status", type: "select", selectList: []},
         { label: "负责人", key: "assigneeInfo", type: "image", objKey: "avatar"},
@@ -332,10 +332,10 @@ export default defineComponent({
       tableBtn: [
         { name: "添加成员", classType: "info", eventName: "toProjectUserPage" },
         { name: "详情", classType: "primary", eventName: "toProjectDetailPage" },
-      ]
-      // detailPath: "/mission/detail",
+      ],
+      // detailPath: "/project/detail",
       // tableQueryDefault: {
-      //   projectId,
+        // projectId,  
       // } 
     })
     provide("tableOptions", tableOptions);

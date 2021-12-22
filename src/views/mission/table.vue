@@ -64,7 +64,7 @@ export default defineComponent({
         // planEndTime: "",
       },
       formOption: [
-        { label: "项目名称", key: "name", type: "input", tableWidth: 160},
+        { label: "任务名称", key: "name", type: "input", tableWidth: 160},
         { label: "负责人", key: "assignee", type: "select", selectList: [], selectType: 1},
         { label: "优先级", key: "level", type: "select", selectList: missionLevelArr},
         { label: "状态", key: "status", type: "select", selectList: missionStatusArr},
@@ -79,6 +79,7 @@ export default defineComponent({
         { type: "datetime", label: "计划开始时间", key: "planStartTime"},
         { type: "datetime", label: "计划结束时间", key: "planEndTime"},
       ],
+      tableBtn: [],
       detailPath: "/mission/detail",
       tableQueryDefault: {
         projectId,

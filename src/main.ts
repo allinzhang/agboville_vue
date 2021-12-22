@@ -1,7 +1,7 @@
 /*
  * @Author: allin.zhang
  * @Date: 2021-12-14 17:04:31
- * @LastEditTime: 2021-12-14 17:17:40
+ * @LastEditTime: 2021-12-20 22:37:57
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/main.ts
@@ -19,6 +19,7 @@ import "./static/ts/permission";
 
 import "./static/styles/index.scss"; // global css
 // import * as filters from './filters' // global filters
+import i18n from './locales';
 
 // register global utility filters
 // Object.keys(filters).forEach(key => {
@@ -31,4 +32,5 @@ createApp(App)
   .use(ElementPlus, {
     locale: zhCn,
   })
+  .use(i18n)
   .mount("#app");
