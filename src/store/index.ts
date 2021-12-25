@@ -18,9 +18,9 @@ export type StateProps = {
   nav: NavState;
 };
 
-const myPlugin = (store) => {
+const myPlugin = (store: any) => {
   // 当 store 初始化后调用
-  store.subscribe((mutation) => {
+  store.subscribe((mutation: any) => {
     sessionStorage.setItem(mutation.type, mutation.payload);
   })
 }

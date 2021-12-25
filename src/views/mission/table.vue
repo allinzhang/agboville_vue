@@ -39,7 +39,11 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
 
-    const projectId = computed(() => store.state.project.projectId);
+    // const projectId = computed(() => store.state.project.projectId);
+    let projectId = "";
+    if (route.query.id) {
+      projectId = route.query.id;
+    }
 
     if (!projectId) {
       router.push("/project/list")
@@ -48,10 +52,8 @@ export default defineComponent({
 
     const projectUserList = []
 
-
-
     let tableOptions = reactive({
-      service: MissionService,
+      service: new MissionService(),
       formObj: {
         // name: "",
         // content: "",
@@ -85,7 +87,8 @@ export default defineComponent({
         projectId,
       } 
     })
-    ProjectUserService.list({projectId: projectId.value}).then(res => {
+    const projectUserService = new ProjectUserService();
+    projectUserService.list({projectId: projectId.value}).then(res => {
       console.log(res)
       if (res.status === 200 && res.data.code === 0) {
         res.data.data.list.forEach((e, i) => {

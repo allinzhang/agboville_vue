@@ -1,4 +1,4 @@
-export interface ProjectRisk {
+export interface ProjectAlter {
   id: number;
   projectId: number;
   reason: string;

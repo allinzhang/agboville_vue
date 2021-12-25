@@ -299,7 +299,7 @@ export default defineComponent({
     const store = useStore<ProjectState>();
 
     let tableOptions = reactive({
-      service: ProjectService,
+      service: new ProjectService(),
       formObj: {
         // name: "",
         // content: "",

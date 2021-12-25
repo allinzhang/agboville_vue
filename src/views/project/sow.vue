@@ -37,7 +37,7 @@ export default defineComponent({
       projectId = route.query.id;
     }
     let tableOptions = reactive({
-      service: ProjectSowService,
+      service: new ProjectSowService(),
       formObj: {},
       formOption: [
         { label: "需求名称", key: "name", type: "input"},

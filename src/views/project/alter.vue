@@ -36,7 +36,7 @@ export default defineComponent({
       projectId = route.query.id;
     }
     let tableOptions = reactive({
-      service: ProjectAlterService,
+      service: new ProjectAlterService(),
       formObj: {},
       formOption: [
         { label: "变更原因", key: "reason", type: "input"},

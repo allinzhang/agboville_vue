@@ -36,7 +36,7 @@ export default defineComponent({
       projectId = route.query.id;
     }
     let tableOptions = reactive({
-      service: ProjectMeetingService,
+      service: new ProjectMeetingService(),
       formObj: {},
       formOption: [
         { label: "会议名称", key: "name", type: "input"},

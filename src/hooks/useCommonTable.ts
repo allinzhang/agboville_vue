@@ -26,7 +26,7 @@ interface CommonTableResult<T> {
   listData: Array<T>;
   listTotal: Ref<number>;
   listQuery: Ref<CommonTableQuery>;
-  objForm: Ref<T>;
+  objForm: any;
   handleFilter: () => void;
   handleCreate: () => void;
   handleEdit: () => void;
@@ -40,7 +40,7 @@ interface CommonTableResult<T> {
 // class CommonTable {
 
 // }
-export default function useCommonTable<T>(obj: T, service: any, options: CommonTableOptions): CommonTableResult<T> {
+export default function useCommonTable<T>(obj: T, service: any, options: CommonTableOptions) {
   const router = useRouter();
 
   const infoDialogVisible = ref(false);
