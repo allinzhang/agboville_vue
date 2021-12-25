@@ -86,7 +86,9 @@ const removePending = (config: AxiosRequestConfig) => {
  */
 export const clearPending = () => {
   for (const [url, cancel] of pending) {
-    cancel(url);
+    if (url.indexOf('/user/detail') == 0) {
+      cancel(url);
+    }
   }
   pending.clear();
 }

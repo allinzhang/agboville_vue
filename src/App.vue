@@ -32,8 +32,16 @@ export default defineComponent({
     }
     store.dispatch("SET_TOKEN", localStorage.getItem("SET_TOKEN"))
     const getUserInfo = async () => {
-      // const userInfo = await UserService.detail();
-      // store.dispatch("SET_USER_INFO", userInfo);
+      console.log("getUserInfo")
+      const res = await UserService.detail();
+      console.log("getUserInfo.res", res)
+      if (res.status === 200 && res.data.code === 0) {
+        store.dispatch("SET_USER_INFO", res.data.data);
+      } else {
+        console.log("detail", res)
+        store.dispatch("SET_USER_INFO", "");
+        localStorage.removeItem("SET_TOKEN")
+      }
     }
     onMounted(getUserInfo)
     // const languageType = navigator.language.toLowerCase();

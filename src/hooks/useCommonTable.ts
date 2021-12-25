@@ -157,7 +157,8 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
     });
   }
   const createObj = async (obj: T) => {
-    const res: HttpResponse = await service.create(obj);
+    
+    const res: HttpResponse = await service.create(Object.assign({}, obj, listQuery));
     if (res.status === 200 && res.data.code === 0) {
       ElMessage({ type: "success", message: "新增成功" });
       listData.value.unshift(obj);
@@ -167,7 +168,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
     }
   }
   const editObj = async (obj: T) => {
-    const res: HttpResponse = await service.update(obj);
+    const res: HttpResponse = await service.update(Object.assign({}, obj, listQuery));
     if (res.status === 200 && res.data.code === 0) {
       const index = listData.value.findIndex((v: T) => v.id === obj.id);
       listData.value.splice(index, 1, obj);

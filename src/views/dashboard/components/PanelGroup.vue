@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import CountTo from 'vue-count-to'
+import CountTo from '../../components/countTo/vue-countTo.vue';
 
 export default defineComponent({
   components: {

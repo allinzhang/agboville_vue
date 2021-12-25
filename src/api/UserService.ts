@@ -13,21 +13,10 @@ import { User } from "../types/user";
 
 export class UserService {
   static async detail(): Promise<HttpResponse> {
-    return new Promise((resolve, reject) => {
-      Axios("/web/user/detail", {
-        method: "GET",
-        responseType: "json"
-      }).then(res => {
-        if (res.status === 200 && res.data.code === 0) {
-          resolve(res.data.data);
-        } else {
-          reject(res)
-        }
-      }).catch(err => {
-        console.error(err)
-        reject(err)
-      })
-    });
+    return Axios("/web/user/detail", {
+      method: "GET",
+      responseType: "json"
+    })
   }
   static async update(params: User): Promise<HttpResponse> {
     return Axios("/web/user/update", {

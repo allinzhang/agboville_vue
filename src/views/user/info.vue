@@ -127,8 +127,11 @@ export default defineComponent({
       return isJPG && isLt2M
     }
     const getUserInfo = async () => {
-      ruleForm.value = await UserService.detail();
-      store.dispatch("SET_USER_INFO", ruleForm.value);
+      const res = await UserService.detail();
+      if (res.status === 200 && res.data.code === 0) {
+        ruleForm.value = res.data.data
+        store.dispatch("SET_USER_INFO", res.data.data);
+      }
     }
     const updateUser = async () => {
       const res = await UserService.update(ruleForm.value)

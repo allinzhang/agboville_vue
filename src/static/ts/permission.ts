@@ -14,6 +14,7 @@ import { clearPending } from "../../api/http";
 const whiteList = ["/login", "/auth-redirect"] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
+  console.log("router.beforeEach", to)
   window.document.title = to.meta.title || 'Agboville';
   // 在跳转路由之前，先清除所有的请求
   clearPending();
