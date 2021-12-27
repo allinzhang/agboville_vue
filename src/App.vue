@@ -48,7 +48,9 @@ export default defineComponent({
     // const state = reactive({
     //   locale: require(`element-plus/lib/locale/lang/${languageType}`).default,
     // });
+    const locale = "zh"
     return {
+      locale
       // ...toRefs(state)
     }
   }

@@ -33,10 +33,9 @@
 
 <script lang="ts">
 // import { Options, Vue } from "vue-class-component";
-import { computed, defineComponent, ref, computed } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 import { ArrowDownBold } from "@element-plus/icons-vue";
 
 // import { mapGetters } from 'vuex'
@@ -73,35 +72,29 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
+
+    const sidebar = ref({ open: true})
 
     const isProjectMenu = computed(() => store.state.project.isProjectMenu);
     const userInfo = computed(() => store.state.user.userInfo);
     const toUserInfoPage = () => {
       router.push("/user/info")
     }
+    const logout = () => {
+      store.dispatch('user/logout')
+      router.push(`/login?redirect=${route.fullPath}`);
+    }
+    const toggleSideBar = () => {
+      store.dispatch('app/toggleSideBar')
+    }
     return {
       isProjectMenu,
+      sidebar,
       userInfo,
-      toUserInfoPage
-    }
-  },
-  watch() {
-    
-  },
-  data () {
-    return {
-      sidebar: {
-        open: true,
-      }
-    }
-  },
-  methods: {
-    toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
-    },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+      toUserInfoPage,
+      toggleSideBar,
+      logout
     }
   }
 })

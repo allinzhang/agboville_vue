@@ -82,12 +82,6 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: "项目会议", icon: "meeting", affix: true },
       },
       {
-        path: "member",
-        component: () => import("../views/project/member.vue"),
-        name: "ProjectMember",
-        meta: { title: "项目成员", icon: "member", affix: true },
-      },
-      {
         path: "plan",
         component: () => import("../views/project/plan.vue"),
         name: "ProjectPlan",

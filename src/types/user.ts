@@ -9,14 +9,16 @@
  */
 
 export interface User {
-  id: number;
-  realname: string;
-  nickname: string;
-  mobile: string;
-  avatar: string;
-  age: number;
-  gender: number;
-  parentId: number;
-  type: number;
-  source: number;
+  id?: number;
+  realname?: string;
+  nickname?: string;
+  mobile?: string;
+  avatar?: string;
+  age?: number;
+  gender?: number;
+  parentId?: number;
+  type?: number;
+  source?: number;
+  account?: string;
+  password?: string;
 }

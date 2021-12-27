@@ -34,7 +34,7 @@ export default defineComponent({
     // const projectId = computed(() => store.state.project.projectId);
     let projectId = "";
     if (route.query.id) {
-      projectId = route.query.id;
+      projectId = route.query.id as string;
     }
     let tableOptions = reactive({
       service: new ProjectSowService(),

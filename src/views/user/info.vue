@@ -64,28 +64,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted, getCurrentInstance } from "vue";
+import { defineComponent, reactive, ref, onMounted, getCurrentInstance, Ref } from "vue";
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import User from '../../types/user';
 import { UserService } from '../../api/UserService';
 
 import { Plus } from '@element-plus/icons-vue'
 
 import { checkNumber } from '../../static/utils/validate';
 import { ElMessageBox, ElMessage } from "element-plus";
+import { User } from '../../types/user';
 
 export default defineComponent({
   components: {
     Plus
   },
-  setup(props, { refs }) {
+  setup(props) {
     const { proxy }: any = getCurrentInstance();
     const router = useRouter();
     const store = useStore();
-    const userForm = ref(null)
-    const ruleForm = ref({
+    const userForm: Ref = ref(null)
+    const ruleForm: Ref<User> = ref({
       avatar: "",
       nickname: "",
       realname: "",
@@ -99,8 +99,8 @@ export default defineComponent({
       realname: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }],
       age: [{ type: 'number', message: "请输入正确的数字", trigger: 'blur' }],
     }
-    const submitForm = (formName) => {
-      userForm.value.validate((valid) => {
+    const submitForm = (formName: string) => {
+      userForm.value.validate((valid: any) => {
         if (valid) {
           updateUser()
         } else {
@@ -108,13 +108,13 @@ export default defineComponent({
         }
       })
     }
-    const resetForm = (formName) => {
+    const resetForm = (formName: string) => {
       userForm.value.resetFields()
     }
-    const handleAvatarSuccess = (res, file) => {
-      ruleForm.avatar.value = URL.createObjectURL(file.raw);
+    const handleAvatarSuccess = (res: any, file: any) => {
+      ruleForm.value.avatar = URL.createObjectURL(file.raw);
     }
-    const beforeAvatarUpload = (file) => {
+    const beforeAvatarUpload = (file: any) => {
       const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -136,7 +136,7 @@ export default defineComponent({
     const updateUser = async () => {
       const res = await UserService.update(ruleForm.value)
       if (res.status === 200 && res.data.code === 0) {
-        store.dispatch("SET_USER_INFO", red.data.data);
+        store.dispatch("SET_USER_INFO", res.data.data);
         ElMessage({ type: "success", message: "修改成功" });
       } else {
         ElMessage({ type: "error", message: res.data.msg || "修改失败" });

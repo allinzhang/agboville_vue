@@ -49,9 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { Options, Vue } from "vue-class-component";
-// import { Prop } from "vue-property-decorator";
+import { defineComponent, PropType } from "vue";
 import path from "path";
 import { isExternal } from "../../../../static/utils/validate";
 import Item from "./Item.vue";
@@ -62,6 +60,8 @@ interface MenuItem {
   hidden: boolean;
   title: string;
   icon: string;
+  path: string;
+  children?: Array<MenuItem>
 }
 interface SidebarItemData {
   onlyOneChild: MenuItem | null;
@@ -82,7 +82,10 @@ export default defineComponent({
   // @Prop(Boolean) isNest!: boolean;
   props: {
     index: Number,
-    item: MenuItem,
+    item: {
+      type: Object as PropType<MenuItem>,
+      required: true
+    },
     basePath: String,
     isNest: Boolean,
   },

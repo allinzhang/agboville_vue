@@ -21,6 +21,7 @@
 <script lang="ts">
 // import { Options, Vue } from "vue-class-component";
 import { defineComponent } from "vue";
+import { useRoute } from 'vue-router';
 // @Options({
 //   components: {},
 // })
@@ -33,6 +34,13 @@ export default defineComponent({
   // private get key() {
   //   return this.$route.path;
   // }
+  setup () {
+    const route = useRoute();
+    const key = route.path;
+    return {
+      key
+    }
+  }
 })
 </script>
 

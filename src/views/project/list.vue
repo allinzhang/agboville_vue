@@ -244,7 +244,6 @@ import { useStore } from 'vuex';
 // // import { Search, CirclePlus, TopRight } from '@element-plus/icons'
 
 // import { HttpResponse } from "../../types/http";
-// import { Project } from "../../types/project";
 
 // import { ExcelService } from "../../static/utils/exportToExcel";
 
@@ -252,6 +251,7 @@ import { useStore } from 'vuex';
 
 import CommonTable from '../../components/table/CommonTable.vue';
 import { ProjectService } from "../../api/ProjectService";
+import { Project } from "../../types/project";
 
 // @Options({
 //   components: {},
@@ -296,7 +296,7 @@ export default defineComponent({
   // },
   setup() {
     const router = useRouter();
-    const store = useStore<ProjectState>();
+    const store = useStore();
 
     let tableOptions = reactive({
       service: new ProjectService(),
@@ -360,10 +360,10 @@ export default defineComponent({
     //     });
     //   }
     // }
-    const toProjectUserPage = (row) => {
+    const toProjectUserPage = (row: Project) => {
       console.log("toProjectUserPage", row)
     }
-    const toProjectDetailPage = (row) => {
+    const toProjectDetailPage = (row: Project) => {
       console.log("toProjectDetailPage", row)
     }
     return {

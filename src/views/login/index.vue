@@ -50,7 +50,7 @@
                   <div v-if="loginMethod == 0">
                     <div>
                       <input
-                        v-model="username"
+                        v-model="accountParams.username"
                         class="input-main_login input-account_form"
                         name="username"
                         type="text"
@@ -60,7 +60,7 @@
                     </div>
                     <div>
                       <input
-                        v-model="password"
+                        v-model="accountParams.password"
                         class="input-main_login"
                         type="password"
                         name="pwd"
@@ -151,7 +151,7 @@ import { ElMessage } from 'element-plus';
 import { AuthService, MobileLoginParams } from "../../api/AuthService";
 
 import { UserState } from "../../store/modules/user";
-// import { HttpResponse } from "@/types/http";
+import { HttpResponse } from "../../types/http";
 // @Component({
 //   components: {},
 //   mixins: []
@@ -178,6 +178,7 @@ export default defineComponent({
     const pageWidth = ref(0);
     const pageHeight = ref(0);
     const loginMethod = ref(1);
+    const codeSecond = ref(0);
     const isGetCode = ref(false);
     const accountParams = reactive({
       username: "",
@@ -205,8 +206,12 @@ export default defineComponent({
       console.log('method', method)
       loginMethod.value = method;
     }
+    const getCodeVali = () => {
+
+    }
     return {
       isGetCode,
+      codeSecond,
       pageWidth,
       pageHeight,
       loginMethod,
@@ -214,6 +219,7 @@ export default defineComponent({
       mobileParams,
       toLoginVali,
       changeLoginMethod,
+      getCodeVali,
     };
   },
   mounted() {

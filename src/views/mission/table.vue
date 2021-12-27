@@ -1,10 +1,10 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-03 17:09:51
+ * @LastEditTime: 2021-12-27 09:49:53
  * @LastEditors: allin.zhang
  * @Description: 
- * @FilePath: /agboville_user_vue/src/views/dashboard/index.vue
+ * @FilePath: /agboville_web_vite/src/views/mission/table.vue
  * 可以输入预定的版权声明、个性签名、空行等
 -->
 <template>
@@ -42,7 +42,7 @@ export default defineComponent({
     // const projectId = computed(() => store.state.project.projectId);
     let projectId = "";
     if (route.query.id) {
-      projectId = route.query.id;
+      projectId = route.query.id as string;
     }
 
     if (!projectId) {
@@ -50,7 +50,7 @@ export default defineComponent({
       return
     }
 
-    const projectUserList = []
+    const projectUserList: Array<{label:string, value: string}> = []
 
     let tableOptions = reactive({
       service: new MissionService(),
@@ -88,17 +88,17 @@ export default defineComponent({
       } 
     })
     const projectUserService = new ProjectUserService();
-    projectUserService.list({projectId: projectId.value}).then(res => {
+    projectUserService.list({projectId: projectId}).then(res => {
       console.log(res)
       if (res.status === 200 && res.data.code === 0) {
-        res.data.data.list.forEach((e, i) => {
+        res.data.data.list.forEach((e: any, i: number) => {
           // projectUserList[e.id] = e;
           projectUserList.push({
             label: e.userId,
             value: e.userId,
           })
           if (i === res.data.data.list.length - 1) {
-            tableOptions.formOption[1].selectList = projectUserList
+            // tableOptions.formOption[1].selectList = projectUserList
             // console.log("tableOptions", tableOptions)
           }
         });

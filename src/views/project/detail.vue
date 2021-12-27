@@ -325,7 +325,7 @@ export default defineComponent({
       { name: "项目成员", endVal: 8, path: "/project/player" },
     ]
     const cardList = ref([1, 1, 1, 1, 1]);
-    const toPath = (index) => {
+    const toPath = (index: number) => {
       if (staticsList[index].path) {
         router.push({
           path: staticsList[index].path,

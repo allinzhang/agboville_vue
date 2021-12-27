@@ -1,7 +1,7 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-19 15:45:15
+ * @LastEditTime: 2021-12-27 09:32:35
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/components/table/CommonTable.vue
@@ -173,7 +173,7 @@
           <el-button
             type="success"
             size="mini"
-            @click="handleEdit(scope.row, scope.$index)"
+            @click="handleEdit(scope.row)"
             >编辑</el-button>
           <el-button
             type="danger"
@@ -224,7 +224,6 @@
             <el-date-picker
               v-model="objForm[item.key]"
               type="datetime"
-              :disabled-date="disabledDate"
               :shortcuts="datePickerShortcut"
               format="YYYY-MM-DD HH:mm:ss"
               value-format="YYYY-MM-DD HH:mm:ss"
@@ -264,17 +263,8 @@ import { Search, CirclePlus, TopRight } from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router';
 
 import useCommonTable from '../../hooks/useCommonTable';
+import { CommonTableOptions, CommonTableFormOption } from '../../types/CommonTable';
 
-interface CommonTableFormOption{
-  label: string;
-  key: string;
-  type: string; // column type (input/image/images/textarea/datatime)
-  tableWidth: number; // table column width
-  objKey: string; // if type=image and data is Object
-  listKey: string; // if type=images and data is Array
-  selectType: number; // value = 0 is ["success", "fail"], value = 1 is [{label, value}]
-  selectList: Array<T>; // edit data
-}
 
 /**
  * public tabke
@@ -287,8 +277,7 @@ interface CommonTableFormOption{
 export default defineComponent({
   setup(props, { emit }) {
     const router = useRouter();
-    const tableOptions = inject("tableOptions");
-
+    const tableOptions: CommonTableOptions = (inject("tableOptions") as CommonTableOptions);
     const datePickerShortcut = [
       {
         text: 'Today',
@@ -320,14 +309,14 @@ export default defineComponent({
       detailPath: tableOptions.detailPath
     })
 
-    const changeRow = (value, row) => {
+    const changeRow = (value: any, row: any) => {
       editObj(row);
     }
-    const toEmitEvent = (eventName, row) => {
+    const toEmitEvent = (eventName: any, row: any) => {
       emit(eventName, row)
     }
-    const toLink = (row, options) => {
-      let obj = {};
+    const toLink = (row: any, options: any) => {
+      let obj: any = {};
       if (options.linkParam) {
         for (let key of options.linkParam) {
           obj[key] = row[key];

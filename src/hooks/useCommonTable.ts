@@ -7,46 +7,15 @@ import { ElMessageBox, ElMessage } from "element-plus";
 
 import { ExcelService } from "../static/utils/exportToExcel";
 import { HttpResponse } from "../types/http";
+import { CommonTableQuery, UseCommonTableOptions, TableObj, dialogTitle } from "../types/CommonTable";
 
-interface CommonTableQuery {
-  page: number;
-  limit: number;
-  sort?: string;
-  order?: string;
-}
-interface CommonTableOptions {
-  title: string; // 标题(导出文件名)
-  listQuery: CommonTableQuery
-  detailPath: string;
-}
-interface CommonTableResult<T> {
-  listLoading: Ref<boolean>;
-  downloadLoading: Ref<boolean>;
-  infoDialogVisible: Ref<boolean>;
-  listData: Array<T>;
-  listTotal: Ref<number>;
-  listQuery: Ref<CommonTableQuery>;
-  objForm: any;
-  handleFilter: () => void;
-  handleCreate: () => void;
-  handleEdit: () => void;
-  handleDelete: () => void;
-  handleMore: () => void;
-  handleDownload: () => void;
-  handleDetail: () => void;
-  infoDialogCancel: () => void;
-  infoDialogConfirm: () => void;
-}
-// class CommonTable {
-
-// }
-export default function useCommonTable<T>(obj: T, service: any, options: CommonTableOptions) {
+export default function useCommonTable(obj: TableObj, service: any, options: UseCommonTableOptions) {
   const router = useRouter();
 
   const infoDialogVisible = ref(false);
   const listLoading = ref(true);
   const downloadLoading = ref(false);
-  const listData = ref([]);
+  const listData: Ref<Array<TableObj>> = ref([]);
   const listTotal = ref(0);
   const listQuery = reactive(Object.assign({}, {
     page: 1,
@@ -54,8 +23,8 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
     sort: "id",
   }, options.listQuery))
   let objForm = reactive(Object.assign({}, obj));
-  const infoDialogTitleMap = { create: "新增", update: "编辑" };
-  let infoDialogType = ref("create");
+  const infoDialogTitleMap: dialogTitle = { create: "新增", update: "编辑" };
+  let infoDialogType: Ref<string> = ref("create");
 
   const handleFilter = () => {
     listQuery.page = 1;
@@ -69,7 +38,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
     //     this.$refs["objForm"].clearValidate();
     //   })
   }
-  const handleEdit = (row: T) => {
+  const handleEdit = (row: TableObj) => {
     console.log("handleEdit", row)
     objForm = row;
     console.log("objForm", objForm)
@@ -79,7 +48,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
     //   this.$refs["objForm"].clearValidate();
     // })
   }
-  const handleDelete = (row, index) => {
+  const handleDelete = (row: TableObj, index: number) => {
     ElMessageBox.confirm(`确认删除?`, "确认操作", {
       confirmButtonText: "删除",
       confirmButtonClass: "danger",
@@ -90,17 +59,20 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
   const handleDownload = () => {
     downloadLoading.value = true;
     const excelService = new ExcelService();
-    excelService.exportAsExcelFile(listData.value, options.title);
+    excelService.exportAsExcelFile(listData.value, options.title || "表格");
     downloadLoading.value = false;
   }
   const handleMore = () => {
     listQuery.page++;
     getList()
   }
-  const handleDetail = (row: T) => {
+  const handleDetail = (row: TableObj) => {
     if (row.id) {
-      router.push(options.detailPath, {
-        id: row.id,
+      router.push({
+        path: options.detailPath,
+        query: {
+          id: row.id,
+        }
       });
     }
   }
@@ -134,7 +106,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
   }
 
   const getList = () => {
-    service.list(listQuery).then(res => {
+    service.list(listQuery).then((res: HttpResponse) => {
       if (res.status === 200 && res.data.code === 0) {
         listData.value = res.data.data.list;
         listTotal.value = res.data.data.total;
@@ -144,10 +116,10 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
       }
     });
   }
-  const deleteObj = (row, index) => {
+  const deleteObj = (row: TableObj, index: number) => {
     service.delete({
       id: row.id
-    }).then(res => {
+    }).then((res: HttpResponse) => {
       if (res.status === 200 && res.data.code === 0) {
         listData.value.splice(index, 1);
         ElMessage({ type: "success", message: "删除成功" });
@@ -156,7 +128,7 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
       }
     });
   }
-  const createObj = async (obj: T) => {
+  const createObj = async (obj: TableObj) => {
     
     const res: HttpResponse = await service.create(Object.assign({}, obj, listQuery));
     if (res.status === 200 && res.data.code === 0) {
@@ -167,10 +139,10 @@ export default function useCommonTable<T>(obj: T, service: any, options: CommonT
       ElMessage.error(res.data.msg || "新增失败");
     }
   }
-  const editObj = async (obj: T) => {
+  const editObj = async (obj: TableObj) => {
     const res: HttpResponse = await service.update(Object.assign({}, obj, listQuery));
     if (res.status === 200 && res.data.code === 0) {
-      const index = listData.value.findIndex((v: T) => v.id === obj.id);
+      const index = listData.value.findIndex((v: TableObj) => v.id === obj.id);
       listData.value.splice(index, 1, obj);
       ElMessage({ type: "success", message: "修改成功" });
       infoDialogVisible.value = false;
