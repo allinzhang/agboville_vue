@@ -11,6 +11,7 @@ import { createApp } from 'vue'
 import ElementPlus from "element-plus";
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import "element-plus/dist/index.css";
+import VueClipboard from 'vue-clipboard2'
 
 import App from "./App.vue";
 import router from "./router";
@@ -33,4 +34,5 @@ createApp(App)
     locale: zhCn,
   })
   .use(i18n)
+  .use(VueClipboard)
   .mount("#app");

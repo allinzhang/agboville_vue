@@ -17,7 +17,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目SOW</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[0].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.sowTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -28,7 +28,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目WBS</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[1].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.wbsTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -39,7 +39,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目计划</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[2].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.planTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -50,7 +50,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目任务</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[3].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.missionTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -63,7 +63,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目范围</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[4].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.scopeTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -74,7 +74,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目会议</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[5].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.meetingTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -85,7 +85,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目风险</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[6].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.riskTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -96,7 +96,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目文档</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[7].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.docTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -109,7 +109,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目变更</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[8].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.alterTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -120,7 +120,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目阶段</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[9].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.stageTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -131,7 +131,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">项目成员</div>
-            <CountTo class="card-panel-num" :start-val="0" :end-val="staticsList[10].endVal" :duration="2600" />
+            <CountTo class="card-panel-num" :start-val="0" :end-val="projectDetail.playerTotal" :duration="2600" />
           </div>
         </div>
       </el-col>
@@ -148,14 +148,12 @@
           <el-collapse v-model="cardList[0]">
             <el-collapse-item title="项目背景与介绍" name="1">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.context || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="项目目标" name="2">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.target || ""}}
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -172,14 +170,12 @@
           <el-collapse v-model="cardList[4]">
             <el-collapse-item title="经验总结" name="1">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.experienceReport || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="教训总结" name="2">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.lessionReport || ""}}
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -199,20 +195,17 @@
           <el-collapse v-model="cardList[2]">
             <el-collapse-item title="计划成本" name="1">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.planPrice || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="实际成本" name="2">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.price || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="成本总结" name="3">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.priceReport || ""}}
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -229,24 +222,23 @@
           <el-collapse v-model="cardList[3]">
             <el-collapse-item title="计划时间" name="1">
               <div>
-                计划开始时间:
+                计划开始时间: {{projectDetail.report.planStartTime || ""}}
               </div>
               <div>
-                计划结束时间:
+                计划结束时间: {{projectDetail.report.planEndTime || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="实际时间" name="2">
               <div>
-                实际开始时间:
+                实际开始时间: {{projectDetail.report.startTime || ""}}
               </div>
               <div>
-                实际结束时间:
+                实际结束时间: {{projectDetail.report.endTime || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="时间总结" name="3">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.timeReport || ""}}
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -265,26 +257,22 @@
           <el-collapse v-model="cardList[1]">
             <el-collapse-item title="计划交付结果" name="1">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.planDeliverableResult || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="实际交付结果" name="2">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.planDeliverableResult || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="未交付结果" name="3">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.deliverableResult || ""}}
               </div>
             </el-collapse-item>
             <el-collapse-item title="交付结果总结" name="4">
               <div>
-                Consistent with real life: in line with the process and logic of real
-                life, and comply with languages and habits that the users are used to;
+                {{projectDetail.report.deliverableResultDesc || ""}}
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -295,12 +283,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import CountTo from '../../components/countTo/vue-countTo.vue';
 import { DocumentCopy } from "@element-plus/icons-vue";
+
+import { ProjectService } from '../../api/ProjectService';
 
 export default defineComponent({
   components: {
@@ -311,6 +301,14 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
+    const projectDetail = ref({
+      report: {}
+    })
+    let projectId = "";
+    if (route.query.id) {
+      projectId = route.query.id as string;
+    }
+    const projectService = new ProjectService();
     const staticsList = [
       { name: "项目SOW", endVal: 60, path: "/project/sow", },
       { name: "项目WBS", endVal: 190, path: "/project/wbs" },
@@ -333,9 +331,20 @@ export default defineComponent({
         })
       }
     }
+    const getDetail = async () => {
+      const res = await projectService.report(projectId)
+      if (res.status === 200 && res.data.code === 0) {
+        projectDetail.value = res.data.data;
+        console.log("projectDetail", projectDetail)
+      }
+    }
+    onMounted(() => {
+      getDetail()
+    })
     return {
       staticsList,
       cardList,
+      projectDetail,
       toPath,
     }
   }

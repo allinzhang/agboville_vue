@@ -1,3 +1,12 @@
+<!--
+ * @Author: allin.zhang
+ * @Date: 2021-12-14 21:27:26
+ * @LastEditTime: 2021-12-27 22:04:34
+ * @LastEditors: allin.zhang
+ * @Description: 
+ * @FilePath: /agboville_web_vite/src/views/layout/components/Sidebar/Logo.vue
+ * 可以输入预定的版权声明、个性签名、空行等
+-->
 <template>
   <div class="sidebar-logo-container" :class="{ 'collapse': collapse }">
     <transition name="sidebarLogoFade">
@@ -39,7 +48,6 @@ export default defineComponent({
   }
 })
 </script>
-
 <style lang="scss" scoped>
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;

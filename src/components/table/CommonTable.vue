@@ -1,7 +1,7 @@
 <!--
  * @Author: allin.zhang
  * @Date: 2021-12-03 17:09:34
- * @LastEditTime: 2021-12-27 09:32:35
+ * @LastEditTime: 2021-12-31 10:52:30
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/components/table/CommonTable.vue
@@ -79,6 +79,19 @@
         >
           导出
         </el-button>
+        <template
+          v-for="(item, index) in queryBtn"
+          :key="index"
+          >
+          <el-button
+            class="filter-item"
+            :type="item.classType"
+            :icon="item.icon"
+            @click="toEmitEvent(item.eventName)"
+          >
+            {{item.name || ""}}
+          </el-button>
+        </template>
       </el-row>
     </div>
     <el-table
@@ -153,7 +166,8 @@
               </template>
             </template>
             <template v-if="item.type === 'image'">
-              <el-avatar :size="36" :src="item.objKey ? scope.row[item.key][item.objKey] : scope.row[item.key]"></el-avatar>
+              <el-avatar :size="36" v-if="item.objKey && scope.row[item.key]" :src="scope.row[item.key][item.objKey]"></el-avatar>
+              <el-avatar :size="36" v-else :src="scope.row[item.key]"></el-avatar>
             </template>
           </template>
         </el-table-column>
@@ -185,14 +199,15 @@
     </el-table>
 
     <el-pagination
-      background
       v-show="listTotal > 0"
+      background
+      layout="prev, pager, next"
       :total="listTotal"
       :page="listQuery.page"
       :limit="listQuery.limit"
-      @pagination="handleMore"
       style="margin-top: 10px;"
-    />
+       @pagination="handleMore"
+    ></el-pagination>
     <!-- 新增/修改弹窗 -->
     <el-dialog
       v-model="infoDialogVisible"
@@ -334,6 +349,7 @@ export default defineComponent({
       tableQuery: tableOptions.tableQuery,
       tableForm: tableOptions.formOption,
       tableBtn: tableOptions.tableBtn,
+      queryBtn: tableOptions.queryBtn,
       Search,
       CirclePlus,
       TopRight,

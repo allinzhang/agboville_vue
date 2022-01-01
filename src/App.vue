@@ -21,6 +21,8 @@ import * as types from "./store/modules/types";
 
 import { UserService } from './api/UserService';
 
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -32,25 +34,25 @@ export default defineComponent({
     }
     store.dispatch("SET_TOKEN", localStorage.getItem("SET_TOKEN"))
     const getUserInfo = async () => {
-      console.log("getUserInfo")
       const res = await UserService.detail();
-      console.log("getUserInfo.res", res)
       if (res.status === 200 && res.data.code === 0) {
         store.dispatch("SET_USER_INFO", res.data.data);
       } else {
-        console.log("detail", res)
         store.dispatch("SET_USER_INFO", "");
         localStorage.removeItem("SET_TOKEN")
       }
     }
     onMounted(getUserInfo)
     // const languageType = navigator.language.toLowerCase();
+    // console.log("languageType", languageType)
+    // const modules = import.meta.glob(`../node_modules/element-plus/lib/locale/lang/${languageType}`)
+    // console.log("modules", modules)
     // const state = reactive({
     //   locale: require(`element-plus/lib/locale/lang/${languageType}`).default,
     // });
-    const locale = "zh"
+    // const locale = languageType
     return {
-      locale
+      locale: zhCn
       // ...toRefs(state)
     }
   }

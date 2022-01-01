@@ -4,11 +4,11 @@
 
     <!-- <breadcrumb id="breadcrumb-container" class="breadcrumb-container" /> -->
     <el-menu default-active="1" class="menu-mission" mode="horizontal" v-if="isProjectMenu">
-      <el-menu-item index="1">表格</el-menu-item>
-      <el-menu-item index="2">看板</el-menu-item>
-      <el-menu-item index="3">日历</el-menu-item>
-      <el-menu-item index="4">甘特图</el-menu-item>
-      <el-menu-item index="5">时间线</el-menu-item>
+      <el-menu-item index="1" @click="toPath('/mission/table')">表格</el-menu-item>
+      <el-menu-item index="2" @click="toPath('/mission/board')">看板</el-menu-item>
+      <el-menu-item index="3" @click="toPath('/mission/calendar')">日历</el-menu-item>
+      <el-menu-item index="4" @click="toPath('/mission/gantt')">甘特图</el-menu-item>
+      <el-menu-item index="5" @click="toPath('/mission/timeline')">时间线</el-menu-item>
     </el-menu>
     <div class="right-menu">
       <el-dropdown
@@ -88,13 +88,20 @@ export default defineComponent({
     const toggleSideBar = () => {
       store.dispatch('app/toggleSideBar')
     }
+    const toPath = (link) => {
+      router.push({
+        path: link,
+        query: route.query
+      });
+    }
     return {
       isProjectMenu,
       sidebar,
       userInfo,
       toUserInfoPage,
       toggleSideBar,
-      logout
+      logout,
+      toPath
     }
   }
 })

@@ -1,7 +1,7 @@
 /*
  * @Author: allin.zhang
  * @Date: 2021-12-14 17:18:28
- * @LastEditTime: 2021-12-27 09:38:11
+ * @LastEditTime: 2021-12-31 10:43:27
  * @LastEditors: allin.zhang
  * @Description: 
  * @FilePath: /agboville_web_vite/src/api/BaseService.ts
@@ -29,7 +29,9 @@ export default class BaseService<T> {
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
-
+  getBaseUrl() {
+    return this.baseUrl;
+  }
   list(params: listParam) {
     return Axios(`${this.baseUrl}/list`, {
       method: "GET",
